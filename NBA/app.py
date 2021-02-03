@@ -58,17 +58,33 @@ def bubbleroute():
     session = Session(engine)
     results = session.query(stats.player_id, stats.player_name,Salary.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m).filter(Salary.player_id == stats.player_id).all()
     session.close()
-    all_stats = []
-    for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
-        stats_dict ={}
-        stats_dict["Player_id"] = player_id
-        stats_dict["Player_name"] = player_name
-        stats_dict["Salary"] = salary
-        stats_dict["Position"] = pos
-        stats_dict["2pm"] = TwoP_m
-        stats_dict["3pm"] = ThreeP_m
-        all_stats.append(stats_dict)
-    return jsonify(all_stats)
+    # all_stats = []
+    # for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
+    #     stats_dict ={}
+    #     stats_dict["Player_id"] = player_id
+    #     stats_dict["Player_name"] = player_name
+    #     stats_dict["Salary"] = salary
+    #     stats_dict["Position"] = pos
+    #     stats_dict["2pm"] = TwoP_m
+    #     stats_dict["3pm"] = ThreeP_m
+    #     all_stats.append(stats_dict)
+
+    player_id = [result[0] for result in results]
+    player_name = [result[1] for result in results]
+    salary = [result[2] for result in results]
+    position = [result[3] for result in results]
+    TwoP_m= [result[4] for result in results]
+    ThreeP_m = [result[5] for result in results]
+
+    pet_data = [{
+        "player_name": player_name,
+        "player_id":player_id,
+        "salary":salary,
+        "Position":position,
+        "2pm": TwoP_m,
+         "3pm":ThreeP_m
+    }]
+    return jsonify(pet_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
