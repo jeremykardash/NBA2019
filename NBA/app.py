@@ -25,8 +25,8 @@ app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URL'] = os.environ.get('DATABASE_URL', '')
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost:5432/nba2018db"
-# db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost:5432/nba2018db"
+db = SQLAlchemy(app)
 
 engine = create_engine("postgresql://postgres:postgres@localhost:5432/nba2018db")
 Base = automap_base()
@@ -44,8 +44,7 @@ combine = Base.classes.combine
 # Service Routes
 @app.route("/api/main")
 def firstRoute():
-    session  = Session(engine)
-    data = session.query(combine.player_id, combine.player_name).all()
+    data = db.session.query(combine.player_id, combine.player_name).all()
     return jsonify(data)
 
 
