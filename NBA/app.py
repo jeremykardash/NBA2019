@@ -43,11 +43,32 @@ combine = Base.classes.combine
 
 stats = Base.classes.stats
 
+Salary = Base.classes.salary
+
+
 # Service Routes
 @app.route("/api/main")
 def firstRoute():
     data = db.session.query(combine.player_id, stats.player_name, stats.pos).filter(combine.player_id == stats.player_id).all()
     return jsonify(data)
+
+
+@app.route("/api/stats")
+def bubbleroute():
+    session = Session(engine)
+    results = session.query(stats.player_id, stats.player_name,Salary.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m).filter(Salary.player_id == stats.player_id).all()
+    session.close()
+    all_stats = []
+    for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
+        stats_dict ={}
+        stats_dict["Player_id"] = player_id
+        stats_dict["Player_name"] = player_name
+        stats_dict["Salary"] = salary
+        stats_dict["Position"] = pos
+        stats_dict["2pm"] = TwoP_m
+        stats_dict["3pm"] = ThreeP_m
+        all_stats.append(stats_dict)
+    return jsonify(all_stats)
 
 if __name__ == "__main__":
     app.run(debug=True)
