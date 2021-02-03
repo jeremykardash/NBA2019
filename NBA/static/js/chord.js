@@ -1,3 +1,8 @@
+
+d3.json("API/route").then(
+
+)
+
 // create the svg area
 var svg = d3.select("#chord-chart")
   .append("svg")
