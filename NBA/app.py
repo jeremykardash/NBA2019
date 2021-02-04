@@ -56,7 +56,8 @@ def firstRoute():
 @app.route("/api/stats")
 def bubbleroute():
     session = Session(engine)
-    results = session.query(stats.player_id, stats.player_name,Salary.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m).filter(Salary.player_id == stats.player_id).all()
+    sel = [stats.player_id, stats.player_name,Salary.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m]
+    results = session.query(*sel).filter(Salary.player_id == stats.player_id).all()
     session.close()
     all_stats = []
     for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
@@ -77,13 +78,18 @@ def bubbleroute():
     # ThreeP_m = [result[5] for result in results]
 
     # pet_data = [{
-    #     "player_name": player_name,
-    #     "player_id":player_id,
-    #     "salary":salary,
-    #     "Position":position,
-    #     "2pm": TwoP_m,
-    #      "3pm":ThreeP_m
+    #     "player_info":{
+    #         "player_name":player_name,
+    #         "player_id": player_id,
+    #         "salary":salary,
+    #         "position":position,
+    #         "stats":{
+    #             "2pm":TwoP_m,
+    #             "3pm":ThreeP_m
+    #         }
+    #     }
     # }]
+    
     return jsonify(all_stats)
 
 if __name__ == "__main__":
