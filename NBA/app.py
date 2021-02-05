@@ -19,11 +19,11 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
 ###NPA API
-from nba_api.stats.static import players
-import nba_api.stats.endpoints
-from nba_api.stats.static import teams
-from nba_api.stats.endpoints import shotchartdetail
-from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
+# from nba_api.stats.static import players
+# import nba_api.stats.endpoints
+# from nba_api.stats.static import teams
+# from nba_api.stats.endpoints import shotchartdetail
+# from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
 
 # Flask Setup
 #################################################
@@ -84,14 +84,14 @@ def bubbleroute():
     results = session.query(*sel).filter(salaries.player_id == stats.player_id).all()
     session.close()
     all_stats = []
-    for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
+    for result in results:
         stats_dict ={}
-        stats_dict["Player_id"] = player_id
-        stats_dict["Player_name"] = player_name
-        stats_dict["Salary"] = salary
-        stats_dict["Position"] = pos
-        stats_dict["2pm"] = TwoP_m
-        stats_dict["3pm"] = ThreeP_m
+        stats_dict["Player_id"] = result[0]
+        stats_dict["Player_name"] = result[1]
+        stats_dict["Salary"] = result[2]
+        stats_dict["Position"] = result[3]
+        stats_dict["2pm"] = result[4]
+        stats_dict["3pm"] = result[5]
         all_stats.append(stats_dict)
     
     return jsonify(all_stats)
