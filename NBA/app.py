@@ -57,6 +57,18 @@ def firstRoute():
     data = session.query(combine.player_id, stats.player_name, stats.pos).filter(combine.player_id == stats.player_id).all()
     return jsonify(data)
 
+@app.route("/api/shotchart/<player_id>")
+#@app.route("/api/shotchart/")
+def shotcharts(player_id=None):
+    
+    player_shotchart = shotchartdetail.ShotChartDetail(player_id=player_id,  #201142
+                                                        team_id=0, 
+                                                        season_nullable='2018-19')
+    
+    data = player_shotchart.get_data_frames()
+    df = data[0]
+    shotchart_data = df.to_dict()
+    return jsonify(shotchart_data)
 
 @app.route("/api/stats")
 def bubbleroute():
