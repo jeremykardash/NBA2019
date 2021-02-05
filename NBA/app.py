@@ -80,7 +80,12 @@ def shotcharts(player_id=None):
 @app.route("/api/stats")
 def bubbleroute():
     session = Session(engine)
-    sel = [stats.player_id, stats.player_name,salaries.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m]
+    sel = [stats.player_id, stats.player_name, salaries.salary, stats.pos,
+    stats.TwoP_m, stats.ThreeP_m, stats.mp, stats.fg, stats.fga, stats.fg_percent,	
+    stats.ThreeP_a,	stats.ThreeP_percent, stats.TwoP_a,	stats.TwoP_percent,	stats.efg_percent,	
+    stats.ft, stats.fta, stats.ft_percent, stats.pts, stats.orb, stats.drb, stats.trb, stats.ast,
+     stats.stl, stats.blk, stats.tov]
+
     results = session.query(*sel).filter(salaries.player_id == stats.player_id).all()
     session.close()
     all_stats = []
@@ -92,6 +97,26 @@ def bubbleroute():
         stats_dict["Position"] = result[3]
         stats_dict["2pm"] = result[4]
         stats_dict["3pm"] = result[5]
+        stats_dict["Minutes_played"] = result[6]
+        stats_dict["Fgm"] = result[7]
+        stats_dict["Fga"] = result[8]
+        stats_dict["Fg_percent"] = result[9]
+        stats_dict["3pa"] = result[10]
+        stats_dict["3p_percent"] = result[11]
+        stats_dict["2pa"] = result[12]
+        stats_dict["2p_percent"] = result[13]
+        stats_dict["Efg_percent"] = result[14]
+        stats_dict["Ftm"] = result[15]
+        stats_dict["Fta"] = result[16]
+        stats_dict["Ft_percent"] = result[17]
+        stats_dict["Points"] = result[18]
+        stats_dict["Orb"] = result[19]
+        stats_dict["Drb"] = result[20]
+        stats_dict["Trb"] = result[21]
+        stats_dict["Assits"] = result[22]
+        stats_dict["Steals"] = result[23]
+        stats_dict["Blocks"] = result[24]
+        stats_dict["Tov"] = result[25]
         all_stats.append(stats_dict)
     
     return jsonify(all_stats)
