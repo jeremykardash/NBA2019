@@ -8,8 +8,8 @@ test();
 
 function dropdown(){
     var url ="/api/stats"
-    var dropdownone = d3.select("#selstatone")
-    var dropdowntwo = d3.select("#selstattwo")
+    var dropdownone = d3.select("#x-stat")
+    var dropdowntwo = d3.select("#y-stat")
 
     d3.json(url).then(function(response){
         console.log(Object.keys(response[0]))
@@ -26,6 +26,6 @@ function dropdown(){
 dropdown()
 
 function buildChart(){
-    
+
 
 }

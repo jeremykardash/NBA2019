@@ -80,6 +80,7 @@ def shotcharts(player_id=None):
 @app.route("/api/stats")
 def bubbleroute():
     session = Session(engine)
+
     sel = [stats.player_id, stats.player_name, salaries.salary, stats.pos,
     stats.TwoP_m, stats.ThreeP_m, stats.mp, stats.fg, stats.fga, stats.fg_percent,	
     stats.ThreeP_a,	stats.ThreeP_percent, stats.TwoP_a,	stats.TwoP_percent,	stats.efg_percent,	
@@ -87,7 +88,9 @@ def bubbleroute():
      stats.stl, stats.blk, stats.tov]
 
     results = session.query(*sel).filter(salaries.player_id == stats.player_id).all()
+   
     session.close()
+
     all_stats = []
     for result in results:
         stats_dict ={}
@@ -113,12 +116,12 @@ def bubbleroute():
         stats_dict["Orb"] = result[19]
         stats_dict["Drb"] = result[20]
         stats_dict["Trb"] = result[21]
-        stats_dict["Assits"] = result[22]
+        stats_dict["Assists"] = result[22]
         stats_dict["Steals"] = result[23]
         stats_dict["Blocks"] = result[24]
         stats_dict["Tov"] = result[25]
         all_stats.append(stats_dict)
-    
+   
     return jsonify(all_stats)
 
 if __name__ == "__main__":
