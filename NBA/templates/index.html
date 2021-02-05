@@ -7,12 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NBA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
 
     <div id='description'></div>
-    <div id='bubble'></div>
+    <div class="row">
+        <div class="col-md-2">
+            <select id="selstatone"></select>
+            <select id="selstattwo"></select>
+          <div id="bubble"></div>
+        </div>
+    </div>
     <div id='chord-chart'></div>
     <div id='shot-chart'></div>
     
