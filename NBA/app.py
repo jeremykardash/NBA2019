@@ -18,6 +18,13 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
+###NPA API
+from nba_api.stats.static import players
+import nba_api.stats.endpoints
+from nba_api.stats.static import teams
+from nba_api.stats.endpoints import shotchartdetail
+from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
+
 # Flask Setup
 #################################################
 app = Flask(__name__)
@@ -40,7 +47,7 @@ combine = Base.classes.combine
 players = Base.classes.players
 stats = Base.classes.stats
 teams = Base.classes.teams
-salary = Base.classes.salaries
+salaries = Base.classes.salaries
 players_team = Base.classes.players_teams
 
 
@@ -73,8 +80,8 @@ def shotcharts(player_id=None):
 @app.route("/api/stats")
 def bubbleroute():
     session = Session(engine)
-    sel = [stats.player_id, stats.player_name,salary.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m]
-    results = session.query(*sel).filter(salary.player_id == stats.player_id).all()
+    sel = [stats.player_id, stats.player_name,salaries.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m]
+    results = session.query(*sel).filter(salaries.player_id == stats.player_id).all()
     session.close()
     all_stats = []
     for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
