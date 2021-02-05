@@ -49,7 +49,7 @@ Salary = Base.classes.salary
 # Service Routes
 @app.route("/api/main")
 def firstRoute():
-    data = db.session.query(combine.player_id, stats.player_name, stats.pos).filter(combine.player_id == stats.player_id).all()
+    data = session.query(combine.player_id, stats.player_name, stats.pos).filter(combine.player_id == stats.player_id).all()
     return jsonify(data)
 
 
