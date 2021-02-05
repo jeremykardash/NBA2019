@@ -69,26 +69,6 @@ def bubbleroute():
         stats_dict["2pm"] = TwoP_m
         stats_dict["3pm"] = ThreeP_m
         all_stats.append(stats_dict)
-
-    # player_id = [result[0] for result in results]
-    # player_name = [result[1] for result in results]
-    # salary = [result[2] for result in results]
-    # position = [result[3] for result in results]
-    # TwoP_m= [result[4] for result in results]
-    # ThreeP_m = [result[5] for result in results]
-
-    # pet_data = [{
-    #     "player_info":{
-    #         "player_name":player_name,
-    #         "player_id": player_id,
-    #         "salary":salary,
-    #         "position":position,
-    #         "stats":{
-    #             "2pm":TwoP_m,
-    #             "3pm":ThreeP_m
-    #         }
-    #     }
-    # }]
     
     return jsonify(all_stats)
 
