@@ -1,118 +1,193 @@
+// adapted from http://bl.ocks.org/SkiWether/f2afd0b8a8bacb4f24c8
+// and Mike Bostock's chord diagram examples and others.
+var visual = document.getElementById("visual");
 
-var margin = {top: 30, right: 25, bottom: 20, left: 25},
-width = 650 - margin.left - margin.right,
-height = 600 - margin.top - margin.bottom,
-innerRadius = Math.min(width, height) * .39,
-outerRadius = innerRadius * 1.04;
-
-// create the svg area
-var svg = d3.select("#chord-chart")
-  .append("svg")
-    .attr("width", 1000)
-    .attr("height", 1000)
-  .append("g")
-    .attr("transform", `translate(${width},${height})`)
-
-var team_name = ['ATL', 'BOS', 'NOP', 'CHI', 'DAL', 'DEN', 'HOU', 'LAC', 'LAL', 'MIA', 'MIL', 'MIN', 'BKN', 'NYK', 'ORL', 'IND', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'OKC', 'TOR', 'UTA', 'MEM', 'WAS', 'DET', 'CHA', 'CLE', 'GSW']
-
-
-
-
-// create input data: a square matrix that provides flow between entities
+// Data: Shared players betweeen teams for the 2018-19 NBA season
 var matrix = [
-  [0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 4, 0, 0, 0, 0, 0], 
-  [2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 4, 2, 0, 2, 0], 
-  [0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 4, 6, 0, 0, 2, 2], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 2, 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0], 
-  [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 4, 0, 0, 4, 2], 
-  [0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 10, 2, 0, 0, 0, 2, 0, 0, 6, 2, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0], 
-  [2, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 2, 2, 2, 0, 6, 0], 
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 10, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 4, 2, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 2, 0, 0, 0, 0, 2, 10, 2, 0, 0, 10, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 2, 2, 2, 0, 2, 2, 6, 2, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 0, 4, 0, 0, 2, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 6, 0], 
-  [2, 0, 2, 0, 4, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 0, 2, 0, 0, 2, 0, 2, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0], 
-  [0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0], 
-  [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 8, 2, 0, 0, 4, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0], 
-  [4, 0, 2, 4, 0, 2, 2, 6, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 2, 2, 0], 
-  [0, 0, 4, 6, 0, 0, 4, 2, 0, 0, 2, 0, 0, 4, 0, 0, 0, 4, 2, 0, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0], 
-  [0, 0, 2, 0, 0, 0, 0, 0, 4, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0], 
-  [0, 0, 2, 2, 2, 2, 4, 0, 0, 2, 6, 0, 0, 0, 0, 0, 0, 2, 6, 2, 2, 0, 4, 4, 2, 2, 0, 0, 0, 0], 
-  [0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+    [0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 4, 0, 0, 0, 0, 0], 
+    [2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 4, 2, 0, 2, 0], 
+    [0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 4, 6, 0, 0, 2, 2], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 2, 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0], 
+    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 4, 0, 0, 4, 2], 
+    [0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 10, 2, 0, 0, 0, 2, 0, 0, 6, 2, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0], 
+    [2, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 2, 2, 2, 0, 6, 0], 
+    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 10, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 4, 2, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 2, 0, 0, 0, 0, 2, 10, 2, 0, 0, 10, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 2, 2, 2, 0, 2, 2, 6, 2, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 0, 4, 0, 0, 2, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 6, 0], 
+    [2, 0, 2, 0, 4, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 0, 2, 0, 0, 2, 0, 2, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0], 
+    [0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0], 
+    [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 8, 2, 0, 0, 4, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0], 
+    [4, 0, 2, 4, 0, 2, 2, 6, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 2, 2, 0], 
+    [0, 0, 4, 6, 0, 0, 4, 2, 0, 0, 2, 0, 0, 4, 0, 0, 0, 4, 2, 0, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0], 
+    [0, 0, 2, 0, 0, 0, 0, 0, 4, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0], 
+    [0, 0, 2, 2, 2, 2, 4, 0, 0, 2, 6, 0, 0, 0, 0, 0, 0, 2, 6, 2, 2, 0, 4, 4, 2, 2, 0, 0, 0, 0], 
+    [0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ];
 
+// Team name abbreviations in propper order
+var array = ['ATL', 'BOS', 'NOP', 'CHI', 'DAL', 'DEN', 'HOU', 'LAC', 'LAL', 'MIA', 'MIL', 'MIN', 'BKN', 'NYK', 'ORL', 'IND', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'OKC', 'TOR', 'UTA', 'MEM', 'WAS', 'DET', 'CHA', 'CLE', 'GSW']
 
-// give this matrix to d3.chord()
-var res = d3.chord()
-    .padAngle(0.05)
-    .sortSubgroups(d3.descending)
-    (matrix)
+// team colours pulled from local .js file
+var colours1 = team_colours.map(elmt => elmt.hexcode1);
+var colours2 = team_colours.map(elmt => elmt.hexcode2);
 
-// Add the links between groups
-svg
-  .datum(res)
-  .append("g")
-  .selectAll("path")
-  .data(function(d) { return d; })
-  .enter()
-  .append("path")
-    .attr("d", d3.ribbon()
-      .radius(190)
-    )
-    .style("fill", "lightgrey")
-    .style("stroke", "grey")
-    .on("mouseover", fade(0.01))
-    .on("mouseout", fade(1))
+// set chord diagram params
+var chord_options = {
+    "gnames": array,
+    "colors": colours1
+};
 
-// this group object use each group of the data.groups object
-var group = svg
-  .datum(res)
-  .append("g")
-  .selectAll("g")
-  .data(function(d) { return d.groups; })
-  .enter()
+// define function that draws chord diagram
+    function Chord(options, matrix) {
 
-// add the group arcs on the outer part of the circle
-group.append("g")
-    .append("path")
-    .style("fill", "grey")
-    .style("stroke", "black")
-    .attr("d", d3.arc()
-      .innerRadius(190)
-      .outerRadius(200)
-    )
+        // initialize the chord configuration variables
+        var config = {
+            width: 640,
+            height: 560,
+            rotation: 0,
+            textgap: 20,
+            colors: colours1
+        };
+        
+        // add options to the chord configuration object
+        if (options) {
+            extend(config, options);
+        }
+        
+        // set chord visualization variables from the configuration object
+        var offset = Math.PI * config.rotation,
+            width = config.width,
+            height = config.height,
+            textgap = config.textgap,
+            colors = config.colors;
+        
+        // set viewBox and aspect ratio to enable a resize of the visual dimensions 
+        var viewBoxDimensions = "0 0 " + width + " " + height,
+            aspect = width / height;
+        
+        if (config.gnames) {
+            gnames = config.gnames;
+        } else {
+            // make a list of names
+            gnames = [];
+            for (var i=97; i<matrix.length; i++) {
+                gnames.push(String.fromCharCode(i));
+            }
+        }
 
-// add labels to the arcs
-group.append("svg:text")
-  .each(function(d) {d.angle = (d.startAngle + d.endAngle) / 2;})
-  .attr("dy", ".35em")
-  .attr("class", "titles")
-  .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
-  .attr("transform", function(d) {
-		return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-		+ "translate(" + (innerRadius) + ")"
-		+ (d.angle > Math.PI ? "rotate(180)" : "");
-  })
-  .text(function(d,i) { return team_name[i]; })
+        // start the d3 magic
+        var chord = d3.layout.chord()
+            .padding(.05)
+            .sortSubgroups(d3.descending)
+            .matrix(matrix);
 
-// event listener
-function fade(opacity) {
-  return function(g, i) {
-      svg.selectAll("path")
-          .filter(function(d) { return d.source.index != i && d.target.index != i; })
-          .transition()
-          .style("opacity", opacity);
-  };
+        var innerRadius = Math.min(width, height) * .31,
+            outerRadius = innerRadius * 1.05;
+
+        var fill = d3.scale.ordinal()
+            .domain(d3.range(matrix.length-1))
+            .range(colors);
+    
+        var svg = d3.select("#chord-chart").append("svg")
+            .attr("id", "visual")
+            .attr("viewBox", viewBoxDimensions)
+            .attr("preserveAspectRatio", "xMinYMid")    // add viewBox and preserveAspectRatio
+            .attr("width", width)
+            .attr("height", height)
+          .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        var g = svg.selectAll("g.group")
+            .data(chord.groups)
+          .enter().append("svg:g")
+            .attr("class", "group");
+
+        g.append("svg:path")
+            .style("fill", function(d) { return fill(d.index); })
+            .style("stroke", "black")
+            .attr("id", function(d, i) { return "group" + d.index; })
+            .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).startAngle(startAngle).endAngle(endAngle))
+            .on("mouseover", fade(.1))
+            .on("mouseout", fade(1));
+
+        g.append("svg:text")
+            .each(function(d) {d.angle = ((d.startAngle + d.endAngle) / 2) + offset; })
+            .attr("dy", ".35em")
+            .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+            .attr("transform", function(d) {
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+                    + "translate(" + (outerRadius + textgap) + ")"
+                    + (d.angle > Math.PI ? "rotate(180)" : "");
+              })
+            .text(function(d) { return gnames[d.index]; });
+
+        svg.append("g")
+            .attr("class", "chord")
+          .selectAll("path")
+            .data(chord.chords)
+          .enter().append("path")
+            .attr("d", d3.ribbon()
+            .radius(innerRadius)
+          )
+            .style("fill", function(d) { return fill(d.source.index); })
+            .style("opacity", 1)
+          .append("svg:title")
+            .text(function(d) { 
+                return  d.source.value + "  " + gnames[d.source.index] + " shared with " + gnames[d.target.index]; 
+            });
+    
+        // helper functions start here
+        
+        function startAngle(d) {
+            return d.startAngle + offset;
+        }
+
+        function endAngle(d) {
+            return d.endAngle + offset;
+        }
+        
+        function extend(a, b) {
+            for( var i in b ) {
+                a[ i ] = b[ i ];
+            }
+        }
+
+        // Returns an event handler for fading a given chord group.
+        function fade(opacity) {
+            return function(g, i) {
+                svg.selectAll(".chord path")
+                    .filter(function(d) { return d.source.index != i && d.target.index != i; })
+                    .transition()
+                    .style("opacity", opacity);
+            };
+        }
+        
+        
+        window.onresize = function() {
+            var targetWidth = (window.innerWidth < width)? window.innerWidth : width;
+            
+            var svg = d3.select("#visual")
+                .attr("width", targetWidth)
+                .attr("height", targetWidth / aspect);
+        }
+
+        
+    }
+
+window.onload = function() {
+    Chord(chord_options, matrix);
 }
 
+d3.select(self.frameElement).style("height", "600px");
