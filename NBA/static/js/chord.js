@@ -1,6 +1,5 @@
 // adapted from http://bl.ocks.org/SkiWether/f2afd0b8a8bacb4f24c8
 // and Mike Bostock's chord diagram examples and others.
-var visual = document.getElementById("visual");
 
 // Data: Shared players betweeen teams for the 2018-19 NBA season
 var matrix = [
@@ -54,8 +53,8 @@ function Chord(options, matrix) {
 
     // initialize the chord configuration variables
     var config = {
-        width: 640,
-        height: 560,
+        width: 1000,
+        height: 1000,
         rotation: 0,
         textgap: 20,
         colors: colours1
@@ -93,27 +92,33 @@ function Chord(options, matrix) {
         .sortSubgroups(d3.descending)
         .matrix(matrix);
 
+    // Def circle size
     var innerRadius = Math.min(width, height) * .31,
         outerRadius = innerRadius * 1.05;
 
+
+    // 
     var fill = d3.scale.ordinal()
         .domain(d3.range(matrix.length-1))
         .range(colors);
 
+    // 
     var svg = d3.select("#chord-chart").append("svg")
         .attr("id", "visual")
         .attr("viewBox", viewBoxDimensions)
         .attr("preserveAspectRatio", "xMinYMid")    // add viewBox and preserveAspectRatio
         .attr("width", width)
         .attr("height", height)
-      .append("g")
+        .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    // create layer for chord diagram
     var g = svg.selectAll("g.group")
         .data(chord.groups)
       .enter().append("svg:g")
         .attr("class", "group");
 
+    // Add arcs for each team
     g.append("svg:path")
         .style("fill", function(d) { return fill(d.index); })
         .style("stroke", "black")
@@ -122,6 +127,7 @@ function Chord(options, matrix) {
         .on("mouseover", fade(.1))
         .on("mouseout", fade(1));
 
+    // Add labels to perimeter of circle
     g.append("svg:text")
         .each(function(d) {d.angle = ((d.startAngle + d.endAngle) / 2) + offset; })
         .attr("dy", ".35em")
@@ -133,6 +139,7 @@ function Chord(options, matrix) {
           })
         .text(function(d) { return gnames[d.index]; });
 
+    // Draw chords between arcs
     svg.append("g")
         .attr("class", "chord")
       .selectAll("path")
@@ -148,16 +155,17 @@ function Chord(options, matrix) {
             return  d.source.value + "  " + gnames[d.source.index] + " shared with " + gnames[d.target.index]; 
         });
 
-    // helper functions start here
-    
+    // helper functions
     function startAngle(d) {
         return d.startAngle + offset;
     }
 
+    // 
     function endAngle(d) {
         return d.endAngle + offset;
     }
     
+    // 
     function extend(a, b) {
         for( var i in b ) {
             a[ i ] = b[ i ];
@@ -174,7 +182,7 @@ function Chord(options, matrix) {
         };
     }
     
-    
+    // window resize helper
     window.onresize = function() {
         var targetWidth = (window.innerWidth < width)? window.innerWidth : width;
         
@@ -186,6 +194,7 @@ function Chord(options, matrix) {
     
 }
 
+// Call Chord on window load
 window.onload = function() {
     Chord(chord_options, matrix);
 }
