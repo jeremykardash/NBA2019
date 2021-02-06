@@ -71,8 +71,25 @@ def shotcharts(player_id=None):
     
     data = player_shotchart.get_data_frames()
     df = data[0]
-    shotchart_data = df.to_dict()
-    return jsonify(shotchart_data)
+    allshots = []
+    for index, row in df.iterrows():
+        shot = {}
+        shot["GAME_DATE"] = row["GAME_DATE"]
+        shot["GAME_ID"] = row["GAME_ID"]
+        shot["TEAM_NAME"] = row["TEAM_NAME"]
+        shot["PLAYER_NAME"] = row["PLAYER_NAME"]
+        shot["PERIOD"] = row["PERIOD"]
+        shot["MINUTES_REMAINING"] = row["MINUTES_REMAINING"]
+        shot["SECONDS_REMAINING"] = row["SECONDS_REMAINING"]
+        shot["ACTION_TYPE"] = row["ACTION_TYPE"]
+        shot["SHOT_TYPE"] = row["SHOT_TYPE"]
+        shot["SHOT_DISTANCE"] = row["SHOT_DISTANCE"]
+        shot["LOC_X"] = row["LOC_X"]
+        shot["LOC_Y"] = row["LOC_Y"]
+        shot["HTM"] = row["HTM"]
+        shot["VTM"] = row["VTM"] 
+        allshots.append(shot)
+    return jsonify(allshots)
 
 @app.route("/api/stats")
 def bubbleroute():
