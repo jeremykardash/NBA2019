@@ -57,10 +57,41 @@ def home():
 
 # Service Routes
 @app.route("/api/main")
-def firstRoute():
+def main():
     session = Session(engine)
     data = session.query(combine.player_id, stats.player_name, stats.pos).filter(combine.player_id == stats.player_id).all()
+    session.close()
     return jsonify(data)
+
+@app.route("/api/teams")
+def teamsroute():
+    session = Session(engine)
+    results = session.query(teams.team_id, teams.abbreviation, teams.nickname, teams.city).all()
+    team_list = []
+    for team_id, abr, nickname, city in results:
+        team = {}
+        team["id"] = team_id
+        team["abr"] = abr
+        team["nickname"] = nickname
+        team["city"] = city
+        team_list.append(team)
+    session.close()
+    return jsonify(team_list)
+
+@app.route("/api/players")
+def playersroute():
+    session = Session(engine)
+    results = session.query(players_team.player_id, players_team.team_id, players_team.player_name).all()
+    players_team_list = []
+    for player_id, team_id, name in results:
+        player = {}
+        player["player_id"] = player_id
+        player["team_id"] = team_id
+        player["player_name"] = name
+        players_team_list.append(player)
+    session.close()
+    return jsonify(players_team_list)
+
 
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):

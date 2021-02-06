@@ -85,4 +85,39 @@ function shotchart() {
         // Plotly.newPlot('shotchart', data)
         });
         };  
+
+
+
+function init() {
+    // select dropdown menu item
+    var dropdown_team = d3.select("#teamID");
+    var dropdown_player = d3.select("#playerID");
+
+    // read the data 
+    var team_url = "api/teams"
+    d3.json(teams_url).then((response)=> {
+        console.log(response)
+
+        //Append the id data to the dropdwown menu
+        response.forEach(function(team) {
+             dropdown_team.append("option").text(team.nickname).attr("value", team.id);
+        });
+
+        dropdown_team.on("input", function() {
+            // get value of selection
+            var value = this.value;
+        
+        var players_url = 'api/players'
+        d3.json(url).then(response =>{
+            dropdown_list = []
+            
+
+        })
+          
+        })
+
+    });
+};
+
 shotchart();
+init();
