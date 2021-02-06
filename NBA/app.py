@@ -74,20 +74,21 @@ def shotcharts(player_id=None):
     allshots = []
     for index, row in df.iterrows():
         shot = {}
-        shot["GAME_DATE"] = row["GAME_DATE"]
-        shot["GAME_ID"] = row["GAME_ID"]
-        shot["TEAM_NAME"] = row["TEAM_NAME"]
-        shot["PLAYER_NAME"] = row["PLAYER_NAME"]
-        shot["PERIOD"] = row["PERIOD"]
-        shot["MINUTES_REMAINING"] = row["MINUTES_REMAINING"]
-        shot["SECONDS_REMAINING"] = row["SECONDS_REMAINING"]
-        shot["ACTION_TYPE"] = row["ACTION_TYPE"]
-        shot["SHOT_TYPE"] = row["SHOT_TYPE"]
-        shot["SHOT_DISTANCE"] = row["SHOT_DISTANCE"]
-        shot["LOC_X"] = row["LOC_X"]
-        shot["LOC_Y"] = row["LOC_Y"]
-        shot["HTM"] = row["HTM"]
-        shot["VTM"] = row["VTM"] 
+        shot["index"] = index
+        shot["game_date"] = row["GAME_DATE"]
+        shot["game_id"] = row["GAME_ID"]
+        shot["team"] = row["TEAM_NAME"]
+        shot["name"] = row["PLAYER_NAME"]
+        shot["quarter"] = row["PERIOD"]
+        shot["minutes"] = row["MINUTES_REMAINING"]
+        shot["seconds"] = row["SECONDS_REMAINING"]
+        shot["action_type"] = row["ACTION_TYPE"]
+        shot["shot_type"] = row["SHOT_TYPE"]
+        shot["shot_distance"] = row["SHOT_DISTANCE"]
+        shot["x"] = row["LOC_X"]
+        shot["y"] = row["LOC_Y"]
+        shot["home"] = row["HTM"]
+        shot["away"] = row["VTM"] 
         allshots.append(shot)
     return jsonify(allshots)
 
