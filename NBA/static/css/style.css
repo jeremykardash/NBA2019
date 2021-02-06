@@ -3,10 +3,47 @@
     padding: 50px 10px; /* Some padding */
     color: black;
     text-align: center; /* Centered text */
-    font-size: 90px; /* Big font size */
+    font-size: 60px; /* Big font size */
     font-weight: bold;
+    font-family: Helvetica, sans-serif;
     position: fixed; /* Fixed position - sit on top of the page */
     top: 0;
     width: 100%; /* Full width */
     transition: 0.2s; /* Add a transition effect (when scrolling - and font size is decreased) */
   }
+
+  #body{
+      font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+
+  #logo 
+{
+   width:200px;/*give it a fixed size*/
+   margin:0 auto;
+   /* animation magic */
+   -webkit-transition: all 1s ease-in-out;
+   -moz-transition: all 1s ease-in-out ;
+   -ms-transition: all 1s ease-in-out ;
+   -o-transition: all 1s ease-in-out ;
+   transition: all 1s ease-in-out ;
+}
+
+#logo img 
+{
+   width:100%;
+   height:auto;
+}
+
+header 
+{
+   width: 100%;
+   padding: 30px 0;
+   background: #000;
+   border-bottom: 1px solid #fff;
+   z-index: 9999;
+}
+
+.shrink 
+{
+   width:100px;/*change the size here*/
+}
