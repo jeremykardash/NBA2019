@@ -50,12 +50,10 @@ teams = Base.classes.teams
 salaries = Base.classes.salaries
 players_team = Base.classes.players_teams
 
-
 # create route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
-
 
 # Service Routes
 @app.route("/api/main")
