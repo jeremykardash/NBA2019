@@ -14,7 +14,7 @@
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
-    padding: 50px 10px; /* Some padding */
+    padding-bottom: 30px;
     color: rgb(255, 255, 255);
     text-align: center; /* Centered text */
     font-size: 75px; /* Big font size */
@@ -25,3 +25,10 @@
     width: 100%; /* Full width */
     transition: 0.2s; /* Add a transition effect (when scrolling - and font size is decreased) */
   }
+
+#body_text{
+    padding-top: 300px;
+    padding-right: 50px;
+    padding-left: 50px;
+    font-size:25px
+}
