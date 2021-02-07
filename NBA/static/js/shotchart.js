@@ -1,47 +1,53 @@
-var svgWidth = 800;
-var svgHeight = 450;
+//Create SVG area
+var svgWidth = 600;
+var svgHeight = svgWidth/50*47;
 
+//Margins for SVG
 var margin = {
     top: 20,
-    right: 40,
-    bottom: 60,
-    left: 100
+    right: 20,
+    bottom: 20,
+    left: 20
 };
 
+//Calculate width
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-function drawcourt(){
-    
-}
-
+//Function to remove existing shotchart
 function remove_shotchart(){
     d3.select("svg").remove()
 }
 
+//Shotchart function takes player_ID as its argument
 function shotchart(player_id) {
 
+    //Clear SVG with function
     remove_shotchart()
-
+    
+    //URL uses argument to create API
     var url =`api/shotchart/${player_id}`
 
+    //Append SVG to the class
     var svg = d3.select(".shotchart")
         .append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
     
+    //Create chart group to plot circles
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
     
-
+    //Access the API
     d3.json(url).then(function(response){
-
+        
+        //Create scales, scales are from NBA API documentation
         var xLinearScale = d3.scaleLinear()
-            .domain([-240,240])
+            .domain([-250,250])
             .range([0, width]);
   
         var yLinearScale = d3.scaleLinear()
-            .domain([0,300])
+            .domain([-45,420])
             .range([height, 0]);
     
         //Create Circles
@@ -56,6 +62,7 @@ function shotchart(player_id) {
             .attr("stroke", "grey")
             .attr("opacity", "1");
         
+        //Add tooltip on circles
         var toolTip = d3.tip()
             .attr("class", "tooltip")
             .offset([80, -60])
@@ -66,12 +73,10 @@ function shotchart(player_id) {
                     ${d.shot_distance}ft. ${d.shot_type}`);
             });
       
-          // Step 7: Create tooltip in the chart
-          // ==============================
+          //Create tooltip in the chart
           chartGroup.call(toolTip);
       
-          // Step 8: Create event listeners to display and hide the tooltip
-          // ==============================
+          //Create event listeners to display and hide the tooltip
           circlesGroup.on("mouseover", function(response) {
             toolTip.show(response, this);
           })
@@ -82,8 +87,12 @@ function shotchart(player_id) {
         });
         };  
 
+//Function to get player info
 function getInfo(player_id) {
+    //Url calls argument from function
     var url = `api/playerinfo/${player_id}`
+
+    //Access API
     d3.json(url).then(data=> {
         
         var data = data[0]
@@ -93,15 +102,19 @@ function getInfo(player_id) {
         //Clear output
         playerInfo.html('')
         
-        //
+        //Input entries
         Object.entries(data).forEach((key) => {   
             playerInfo.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
         });
     })
 };
 
+//Function for player stats for 2018-2019 season
 function getStats(player_id) {
+    //Url calls argument from function
     var url = `api/playerstats/${player_id}`
+
+    //access API
     d3.json(url).then(data=> {
 
         var data = data[0]
@@ -111,15 +124,18 @@ function getStats(player_id) {
         //Clear output
         playerStats.html('')
         
-        //
+        //Inout entries
         Object.entries(data).forEach((key) => {   
             playerStats.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
         });
     })
 };
 
-
+//Function to initialize the page
 function init() {
+    shotchart(2544);
+    getInfo(2544);
+    getStats(2544);
     // select dropdown menu item
     var dropdown_team = d3.select("#teamID");
     var dropdown_player = d3.select("#playerID");
@@ -132,21 +148,34 @@ function init() {
         response.forEach(function(team) {
              dropdown_team.append("option").text(team.nickname).attr("value", team.id);
             });
-
-        dropdown_team.on("change", function(){
-            dropdown_player.selectAll("option").remove()
-            // get value of selection
-            var input_value = this.value;
         
+        //When the dropdown menu changes
+        dropdown_team.on("change", function(){
+
+            //Remove all existing dropdown options
+            dropdown_player.selectAll("option").remove()
+
+            // get value of selection of change
+            var input_value = this.value;
+            
+            //Call players API
             var players_url = 'api/players'
+
+            //Access API
             d3.json(players_url).then(response =>{
+
+                //For each player check if they were on that team, and append the player to the dropdown
                 response.forEach(function(player){
                         if (player.team_id == input_value) {
                         dropdown_player.append("option").text(player.player_name).attr("value", player.player_id)}
                 
                 })
+        //When the dropdown menu changes
         dropdown_player.on("change", function(){
+            //Get the value of the player from the player ID
             var player_value = this.value
+
+            //Run shotchart, info and stats functions
             shotchart(player_value);
             getInfo(player_value);
             getStats(player_value);
