@@ -32,3 +32,10 @@
     padding-left: 50px;
     font-size:25px
 }
+
+.panel > .panel-title {
+    background-image: none;
+    background-color: rgb(2, 0, 129);
+    color: rgb(107, 11, 11);
+
+}
