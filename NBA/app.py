@@ -1,10 +1,7 @@
 # import necessary libraries
-
 import os
 from flask.globals import session
 from flask_sqlalchemy import SQLAlchemy
-
-#from models import create_classes
 
 from flask import (
     Flask,
