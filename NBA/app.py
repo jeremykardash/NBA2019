@@ -23,6 +23,7 @@ from nba_api.stats.static import players
 import nba_api.stats.endpoints
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import shotchartdetail
+from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
 
 # Flask Setup
@@ -91,6 +92,29 @@ def playersroute():
         players_team_list.append(player)
     session.close()
     return jsonify(players_team_list)
+
+@app.route("/api/playerinfo/<id>")
+def playerinfo(id=None):
+    
+    player_info = commonplayerinfo.CommonPlayerInfo(player_id=id)
+    df = player_info.get_data_frames()[0]
+    player_data = []
+    for index, row in df.iterrows():
+        data = {}
+        data["player_id"] = row["PERSON_ID"]
+        data["name"] = row["DISPLAY_FIRST_LAST"]
+        data["school"] = row["SCHOOL"]
+        data["country"] = row["COUNTRY"]
+        data["height"] = row["HEIGHT"]
+        data["weight"] = row["WEIGHT"]
+        data["seasons"] = row["SEASON_EXP"]
+        data["name"] = row["DISPLAY_FIRST_LAST"]
+        data["draft_year"] = row["DRAFT_YEAR"]
+        data["draft_round"] = row["DRAFT_ROUND"]
+        data["draft_number"] = row["DRAFT_NUMBER"]
+        player_data.append(data)
+    
+    return jsonify(player_data)
 
 
 @app.route("/api/shotchart/<player_id>")
