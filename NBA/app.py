@@ -113,6 +113,10 @@ def playerinfo(id=None):
     
     return jsonify(player_data)
 
+@app.route("/api/playerstats/<id>")
+def playerinfo(id=None):
+
+
 
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):
