@@ -106,7 +106,9 @@ def shotcharts(player_id=None):
     for index, row in df.iterrows():
         shot = {}
         shot["index"] = index
-        shot["game_date"] = row["GAME_DATE"]
+        shot["year"] = row["GAME_DATE"][0:4]
+        shot["month"] = row["GAME_DATE"][4:6]
+        shot["day"] = row["GAME_DATE"][6:8]
         shot["game_id"] = row["GAME_ID"]
         shot["team"] = row["TEAM_NAME"]
         shot["name"] = row["PLAYER_NAME"]

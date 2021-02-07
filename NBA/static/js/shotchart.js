@@ -11,7 +11,9 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-
+function drawcourt(){
+    
+}
 
 function remove_shotchart(){
     d3.select("svg").remove()
@@ -30,16 +32,16 @@ function shotchart(player_id) {
     
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
-       
+    
 
     d3.json(url).then(function(response){
 
         var xLinearScale = d3.scaleLinear()
-            .domain(d3.extent(response, d => d.x))
+            .domain([-240,240])
             .range([0, width]);
   
         var yLinearScale = d3.scaleLinear()
-            .domain(d3.extent(response, d => d.y))
+            .domain([0,300])
             .range([height, 0]);
     
         //Create Circles
@@ -49,21 +51,19 @@ function shotchart(player_id) {
             .append("circle")
             .attr("cx", d => xLinearScale(d.x))
             .attr("cy", d => yLinearScale(d.y))
-            .attr("r", "3")
+            .attr("r", "3.5")
             .attr("fill", "orange")
-            .attr("opacity", ".8");
+            .attr("stroke", "grey")
+            .attr("opacity", "1");
         
         var toolTip = d3.tip()
             .attr("class", "tooltip")
             .offset([80, -60])
             .html(function(d) {
-              return (`${d.action_type}<br>
-                    Distance: ${d.shot_distance}<br>
-                    Home:${d.home} Away: ${d.away}
-                    Quarter: ${d.quarter}<br>
-                    Time:${d.minutes}:${d.seconds}<br>
-
-                    `);
+              return (`<strong>${d.home} v ${d.away} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
+                    ${d.day}/${d.month}/${d.year} <br>
+                    ${d.action_type}<br>
+                    ${d.shot_distance}ft. ${d.shot_type}`);
             });
       
           // Step 7: Create tooltip in the chart
@@ -92,7 +92,6 @@ function init() {
     // read the data 
     var teams_url = "api/teams"
     d3.json(teams_url).then((response)=> {
-        console.log(response)
 
         //Append the id data to the dropdwown menu
         response.forEach(function(team) {
