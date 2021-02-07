@@ -11,15 +11,23 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-function shotchart() {
-    var player_id = 1628995
+
+
+function remove_shotchart(){
+    d3.select("svg").remove()
+}
+
+function shotchart(player_id) {
+
+    remove_shotchart()
+
     var url =`api/shotchart/${player_id}`
 
     var svg = d3.select(".shotchart")
         .append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
-
+    
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
        
@@ -71,18 +79,6 @@ function shotchart() {
             .on("mouseout", function(response, index) {
               toolTip.hide(response);
             });
-        
-        //console.log(response)
-        // var trace1 = {
-        //     x: response.map(d => d.x),
-        //     y: response.map(d => d.y),
-        //     mode: 'markers',
-        //     type: 'scatter',
-        //     text: response.map(d => d.action_type),
-        // }
-        // var data = [trace1];
-
-        // Plotly.newPlot('shotchart', data)
         });
         };  
 
@@ -94,30 +90,38 @@ function init() {
     var dropdown_player = d3.select("#playerID");
 
     // read the data 
-    var team_url = "api/teams"
+    var teams_url = "api/teams"
     d3.json(teams_url).then((response)=> {
         console.log(response)
 
         //Append the id data to the dropdwown menu
         response.forEach(function(team) {
              dropdown_team.append("option").text(team.nickname).attr("value", team.id);
-        });
+            });
 
-        dropdown_team.on("input", function() {
+        dropdown_team.on("change", function(){
+            dropdown_player.selectAll("option").remove()
             // get value of selection
-            var value = this.value;
+            var input_value = this.value;
         
-        var players_url = 'api/players'
-        d3.json(url).then(response =>{
-            dropdown_list = []
+            var players_url = 'api/players'
+            d3.json(players_url).then(response =>{
+                response.forEach(function(player){
+                        if (player.team_id == input_value) {
+                        dropdown_player.append("option").text(player.player_name).attr("value", player.player_id)}
+                
+                })
+        dropdown_player.on("change", function(){
+            var player_value = this.value
+            shotchart(player_value);
             
-
         })
-          
+
+            })
         })
 
     });
 };
 
-shotchart();
 init();
+
