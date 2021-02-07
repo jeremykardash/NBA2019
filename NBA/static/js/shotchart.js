@@ -82,6 +82,41 @@ function shotchart(player_id) {
         });
         };  
 
+function getInfo(player_id) {
+    var url = `api/playerinfo/${player_id}`
+    d3.json(url).then(data=> {
+        
+        var data = data[0]
+        //Select the metadata area to input
+        var playerInfo = d3.select('#player-info');
+
+        //Clear output
+        playerInfo.html('')
+        
+        //
+        Object.entries(data).forEach((key) => {   
+            playerInfo.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
+        });
+    })
+};
+
+function getStats(player_id) {
+    var url = `api/playerstats/${player_id}`
+    d3.json(url).then(data=> {
+
+        var data = data[0]
+        //Select the metadata area to input
+        var playerStats = d3.select('#player-stats');
+
+        //Clear output
+        playerStats.html('')
+        
+        //
+        Object.entries(data).forEach((key) => {   
+            playerStats.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
+        });
+    })
+};
 
 
 function init() {
@@ -113,6 +148,8 @@ function init() {
         dropdown_player.on("change", function(){
             var player_value = this.value
             shotchart(player_value);
+            getInfo(player_value);
+            getStats(player_value);
             
         })
 
