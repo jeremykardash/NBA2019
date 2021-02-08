@@ -199,7 +199,7 @@ var ySelection ="Assists";
 function reportX(period) {
   if (period=="") return; // please select - possibly you want something else here
 xSelection = period;
-  
+
 
 redraw();
 } 
@@ -249,8 +249,8 @@ d3.json(url).then(function(data) {
 
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
 
 // scales w/o extra padding
 //  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
@@ -260,8 +260,8 @@ svg.selectAll("g").remove();
 svg.selectAll("text").remove();
   // x-axis
   svg.append("g")
-      .attr("class", "x-axis")
-      .attr("transform", `translate(0, ${height})`)
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
     .append("text")
       .attr("class", "label")
@@ -274,7 +274,7 @@ svg.selectAll("text").remove();
 
   // y-axis
   svg.append("g")
-      .attr("class", "y-axis")
+      .attr("class", "y axis")
       .call(yAxis)
     .append("text")
       .attr("class", "label")
@@ -294,14 +294,13 @@ svg.selectAll("text").remove();
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));}) 
       .on("mouseover", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-          tooltip.html(d["Player_name"] + "<br/> " + "<br/>(" + xValue(d) 
-          + ", " + yValue(d) + ")")
-               .style("left", (d3.event.pageX + 10) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
-      })
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+             tooltip.html(`${d.Player_name} <br>(${xSelection}: ${d[xValue]},${d[yValue]})`)
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
       .on("mouseout", function(d) {
           tooltip.transition()
                .duration(500)
@@ -348,15 +347,14 @@ svg.selectAll("text").remove();
 });
 
 }
-
-	// setup x 
-	var xValue = function(d) { return d[xSelection];}; // data -> value
+// setup x 
+var xValue = function(d) { return d[xSelection];}; // data -> value
     var xScale = d3.scaleLinear().range([0, width]);// value -> display
 	var xMap = function(d) { return xScale(xValue(d));}; // data -> display
 	var xAxis = d3.axisBottom(xScale);
 
-	// setup y
-	var yValue = function(d) { return d[ySelection];}; // data -> value
+// setup y
+var yValue = function(d) { return d[ySelection];}; // data -> value
     var yScale = d3.scaleLinear().range([height, 0]); // value -> display
 	var yMap = function(d) { return yScale(yValue(d));}; // data -> display
 	var yAxis = d3.axisLeft(yScale);
@@ -372,9 +370,8 @@ var svg = d3.select("#bubble").append("svg")
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-
 // add the tooltip area to the webpage
-var tooltip = d3.select("body").append("div")
+var tooltip = d3.select("#bubble").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -390,36 +387,39 @@ d3.json(url).then(function(data) {
   });
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
 
 // scales w/o extra padding
 //  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
 //  yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
 
   // x-axis
-  svg.append("g")
+  var xaxis = svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-    .append("text")
+      .attr("transform", `translate(0, ${height})`)
+      .call(xAxis);
+   xaxis .append("text")
       .attr("class", "label")
       .attr("x", width)
       .attr("y", -6)
+      .attr("font-size",10)
       .style("text-anchor", "end")
       .text(xSelection);
 
   // y-axis
-  svg.append("g")
+  var yaxis= svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
+      .call(yAxis);
+    yaxis.append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
+      .attr("font-size",10)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text(ySelection);
+
 
   // draw dots
   svg.selectAll(".dot")
@@ -431,14 +431,13 @@ d3.json(url).then(function(data) {
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));}) 
       .on("mouseover", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-          tooltip.html(d["Player_name"] + "<br/> " + "<br/>(" + xValue(d) 
-	        + ", " + yValue(d) + ")")
-               .style("left", (d3.event.pageX + 10) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
-      })
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+             tooltip.html(`${d.Player_name} <br/> <br/>(${xSelection}: ${d[xValue]}, ${ySelection}:${d[yValue]})`)
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
       .on("mouseout", function(d) {
           tooltip.transition()
                .duration(500)
@@ -450,6 +449,7 @@ d3.json(url).then(function(data) {
       .data(color.domain())
     .enter().append("g")
       .attr("class", "legend")
+      .attr("id",function(d){return d})
       .attr("transform", function(d, i) { return "translate(10," + (i+7) * 20 + ")"; });
 
   // draw legend colored rectangles
@@ -467,6 +467,17 @@ d3.json(url).then(function(data) {
       .style("text-anchor", "end")
       .text(function(d) { 
         return d;})
+
+    d3.select("#PF-SF").remove()
+    d3.select("#SF-SG").remove()
+    d3.select("#SG-PF").remove()
+    d3.select("#C-PF").remove()
+    d3.select("#SG-SF").remove()
+   
+   
+   
+   
+   
 });
 
 

@@ -13,13 +13,25 @@ body {
     stroke: #000;
   }
   
-  .tooltip {
+  /* .tooltip {
     position: absolute;
     width: 200px;
     height: 28px;
     pointer-events: none;
+  } */
+
+  .tooltip {
+    padding: 6px;
+    font-size: 12px;
+    line-height: 1;
+    line-height: 1.5em;
+    color: #fff;
+    text-align: center;
+    text-transform: capitalize;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
   }
-  h1 {
+h1 {
         text-align: center;
           }
   
