@@ -14,6 +14,8 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
+
+//Function for arcs in the court
 function appendArcPath(base, radius, startAngle, endAngle) {
     var points = 30;
 
@@ -187,7 +189,7 @@ function shotchart(player_id) {
             .data(response)
             .enter()
             .append("circle")
-            .attr("cx", (d => xLinearScale(d.x)))
+            .attr("cx", (d => xLinearScale(d.x)*(-1)))
             .attr("cy", (d => height - yLinearScale(d.y)))
             .attr("r", "3.5")
             .attr("fill", "orange")
@@ -202,8 +204,7 @@ function shotchart(player_id) {
               return (`<strong>${d.home} v ${d.away} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
                     ${d.day}/${d.month}/${d.year} <br>
                     ${d.action_type}<br>
-                    ${d.shot_distance}ft. ${d.shot_type}<br>
-                    ${d.x}, ${d.y}`);
+                    ${d.shot_distance}ft. ${d.shot_type}`);
             });
       
           //Create tooltip in the chart
