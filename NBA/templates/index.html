@@ -15,8 +15,18 @@
     <div id='description'></div>
     <div class="row">
         <div class="col-md-2">
-            <select id="x-stat" onchange="reportX(this.value)"></select>
-            <select id="y-stat" onchange="reportY(this.value)"></select>
+            <p>
+                <span>
+                    <label for="x-axis">Select X-axis</label>
+                </span>
+                <select id="x-stat" onchange="reportX(this.value)"></select>
+            </p>
+            <p>
+                <span>
+                    <label for="y-axis">Select y-axis</label>
+                </span>
+                <select id="y-stat" onchange="reportY(this.value)"></select>
+            </p>
             <!-- <button onclick="setGraph()">submit</button> -->
           <div id="bubble"></div>
         </div>

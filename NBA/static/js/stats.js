@@ -215,11 +215,11 @@ var svgWidth = window.innerWidth;
     
 var svgHeight = window.innerHeight;
 
-	var margin = {top: 20, right: 20, bottom: 30, left: 40};
+var margin = {top: 20, right: 20, bottom: 30, left: 40};
         
-    var width = svgWidth - margin.left - margin.right;
+var width = svgWidth - margin.left - margin.right;
 
-	var height = svgHeight - margin.top - margin.bottom;
+var height = svgHeight - margin.top - margin.bottom;
 
 
 
@@ -260,7 +260,7 @@ svg.selectAll("g").remove();
 svg.selectAll("text").remove();
   // x-axis
   svg.append("g")
-      .attr("class", "x axis")
+      .attr("class", "x-axis")
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis)
     .append("text")
@@ -274,7 +274,7 @@ svg.selectAll("text").remove();
 
   // y-axis
   svg.append("g")
-      .attr("class", "y axis")
+      .attr("class", "y-axis")
       .call(yAxis)
     .append("text")
       .attr("class", "label")
@@ -357,7 +357,7 @@ svg.selectAll("text").remove();
 
 	// setup y
 	var yValue = function(d) { return d[ySelection];}; // data -> value
-	var yScale = d3.scaleLinear().range([height, 0]); // value -> display
+    var yScale = d3.scaleLinear().range([height, 0]); // value -> display
 	var yMap = function(d) { return yScale(yValue(d));}; // data -> display
 	var yAxis = d3.axisLeft(yScale);
 
@@ -367,10 +367,11 @@ color = d3.scaleOrdinal(d3.schemeCategory10);
 
 // add the graph canvas to the body of the webpage
 var svg = d3.select("#bubble").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
 
 // add the tooltip area to the webpage
 var tooltip = d3.select("body").append("div")
@@ -389,12 +390,12 @@ d3.json(url).then(function(data) {
   });
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-  yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+//   xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
+//   yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
 
 // scales w/o extra padding
-//  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
-//  yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
+ xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
+ yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
 
   // x-axis
   svg.append("g")
