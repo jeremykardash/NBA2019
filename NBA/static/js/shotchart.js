@@ -14,6 +14,21 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
+function appendArcPath(base, radius, startAngle, endAngle) {
+    var points = 30;
+
+    var angle = d3.scaleLinear()
+        .domain([0, points - 1])
+        .range([startAngle, endAngle]);
+
+    var line = d3.lineRadial()
+        .radius(radius)
+        .angle(function(d, i) { return angle(i); });
+
+    return base.datum(d3.range(points))
+        .attr("d", line);
+}
+
 //Function to remove existing shotchart
 function remove_shotchart(){
     d3.select("svg").remove()
@@ -49,14 +64,131 @@ function shotchart(player_id) {
         var yLinearScale = d3.scaleLinear()
             .domain([-45,420])
             .range([height, 0]);
+
+        var Basket = chartGroup.append('circle');
+        var Backboard = chartGroup.append('rect');
+        var Outterbox = chartGroup.append('rect');
+        var Innerbox = chartGroup.append('rect');
+        var CornerThreeLeft = chartGroup.append('rect');
+        var CornerThreeRight = chartGroup.append('rect');
+        var OuterLine = chartGroup.append('rect');
+        var RestrictedArea = chartGroup.append('path')
+        var TopFreeThrow = chartGroup.append('path')
+        var BottomFreeThrow = chartGroup.append('path')
+        var ThreeLine = chartGroup.append('path')
+        var CenterOuter = chartGroup.append('path')
+        var CenterInner = chartGroup.append('path')
+
+        var court_xScale = d3.scaleLinear()
+            .domain([-25, 25])
+            .range([0, width])
+        var court_yScale = d3.scaleLinear()
+            .domain([-4,43])
+            .range([margin.top, height])
+        
+        Basket.attr('cx', court_xScale(0))
+            .attr('cy', court_yScale(-0.75))
+            .attr('r', court_yScale(0.75)-court_yScale(0))
+            .style('fill', 'None')
+            .style('stroke', 'black');
+        
+        Backboard.attr('x', court_xScale(-3))
+            .attr('y', court_yScale(-1.5))
+            .attr('width', court_xScale(3)-court_xScale(-3))
+            .attr('height', 1)
+            .style('fill', 'none')
+            .style('stroke', 'black');
+ 
+ 
+        Outterbox
+                .attr('x', court_xScale(-8))
+                .attr('y', court_yScale(-4))
+                .attr('width', court_xScale(8)-court_xScale(-8))
+                .attr('height', court_yScale(15)-court_yScale(-4))
+                .style('fill', 'none')
+                .style('stroke', 'black');
     
+    
+        Innerbox
+                .attr('x', court_xScale(-6))
+                .attr('y', court_yScale(-4))
+                .attr('width', court_xScale(6)-court_xScale(-6))
+                .attr('height', court_yScale(15)-court_yScale(-4))
+                .style('fill', 'none')
+                .style('stroke', 'black');
+    
+    
+        CornerThreeLeft
+                .attr('x', court_xScale(-22))
+                .attr('y', court_yScale(-4))
+                .attr('width', 1)
+                .attr('height', court_yScale(10)-court_yScale(-4))
+                .style('fill', 'none')
+                .style('stroke', 'black');
+    
+        CornerThreeRight
+                .attr('x', court_xScale(22))
+                .attr('y', court_yScale(-4))
+                .attr('width', 1)
+                .attr('height', court_yScale(10)-court_yScale(-4))
+                .style('fill', 'none')
+                .style('stroke', 'black');
+    
+        OuterLine
+                .attr('x', court_xScale(-25))
+                .attr('y', court_yScale(-4))
+                .attr('width', court_xScale(25)-court_xScale(-25))
+                .attr('height', court_yScale(43)-court_yScale(-4))
+                .style('fill', 'none')
+                .style('stroke', 'black');
+    
+        appendArcPath(RestrictedArea, court_xScale(3)-court_xScale(0), (90)*(Math.PI/180), (270)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(-0.75) +")");
+    
+    
+        appendArcPath(TopFreeThrow, court_xScale(6)-court_xScale(0), (90)*(Math.PI/180), (270)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(15) +")");
+    
+    
+        appendArcPath(BottomFreeThrow, court_xScale(6)-court_xScale(0), (-90)*(Math.PI/180), (90)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .style("stroke-dasharray", ("3, 3"))
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(15) +")");
+    
+    
+        var angle = Math.atan((10-0.75)/(22))* 180 / Math.PI
+        var dis = court_yScale(18);
+
+        appendArcPath(ThreeLine, dis, (angle+90)*(Math.PI/180), (270-angle)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .attr('class', 'shot-chart-court-3pt-line')
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(0) +")");
+    
+    
+        appendArcPath(CenterOuter, court_xScale(6)-court_xScale(0), (-90)*(Math.PI/180), (90)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(43) +")");
+    
+        appendArcPath(CenterInner, court_xScale(2)-court_xScale(0), (-90)*(Math.PI/180), (90)*(Math.PI/180))
+            .attr('fill', 'none')
+            .attr("stroke", "black")
+            .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(43) +")");
+            
+        
         //Create Circles
         var circlesGroup = chartGroup.selectAll("circle")
             .data(response)
             .enter()
             .append("circle")
-            .attr("cx", d => xLinearScale(d.x))
-            .attr("cy", d => yLinearScale(d.y))
+            .attr("cx", (d => xLinearScale(d.x)))
+            .attr("cy", (d => height - yLinearScale(d.y)))
             .attr("r", "3.5")
             .attr("fill", "orange")
             .attr("stroke", "grey")
@@ -70,7 +202,8 @@ function shotchart(player_id) {
               return (`<strong>${d.home} v ${d.away} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
                     ${d.day}/${d.month}/${d.year} <br>
                     ${d.action_type}<br>
-                    ${d.shot_distance}ft. ${d.shot_type}`);
+                    ${d.shot_distance}ft. ${d.shot_type}<br>
+                    ${d.x}, ${d.y}`);
             });
       
           //Create tooltip in the chart
@@ -154,7 +287,6 @@ function init() {
 
             //Remove all existing dropdown options
             dropdown_player.selectAll("option").remove()
-
             // get value of selection of change
             var input_value = this.value;
             
