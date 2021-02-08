@@ -31,6 +31,7 @@ function appendArcPath(base, radius, startAngle, endAngle) {
         .attr("d", line);
 }
 
+
 //Function to remove existing shotchart
 function remove_shotchart(){
     d3.select("svg").remove()
@@ -64,9 +65,12 @@ function shotchart(player_id) {
             .range([0, width]);
   
         var yLinearScale = d3.scaleLinear()
-            .domain([-45,420])
+            .domain([-45,430])
             .range([height, 0]);
 
+
+        //Code for court derived from https://bl.ocks.org/YouthBread/4481cdd85d60a503a986d658404232c8
+        //Create every object to place
         var Basket = chartGroup.append('circle');
         var Backboard = chartGroup.append('rect');
         var Outterbox = chartGroup.append('rect');
@@ -81,6 +85,7 @@ function shotchart(player_id) {
         var CenterOuter = chartGroup.append('path')
         var CenterInner = chartGroup.append('path')
 
+
         var court_xScale = d3.scaleLinear()
             .domain([-25, 25])
             .range([0, width])
@@ -88,13 +93,15 @@ function shotchart(player_id) {
             .domain([-4,43])
             .range([margin.top, height])
         
-        Basket.attr('cx', court_xScale(0))
+        Basket
+            .attr('cx', court_xScale(0))
             .attr('cy', court_yScale(-0.75))
             .attr('r', court_yScale(0.75)-court_yScale(0))
             .style('fill', 'None')
             .style('stroke', 'black');
         
-        Backboard.attr('x', court_xScale(-3))
+        Backboard
+            .attr('x', court_xScale(-3))
             .attr('y', court_yScale(-1.5))
             .attr('width', court_xScale(3)-court_xScale(-3))
             .attr('height', 1)
@@ -121,18 +128,18 @@ function shotchart(player_id) {
     
     
         CornerThreeLeft
-                .attr('x', court_xScale(-22))
+                .attr('x', court_xScale(-21))
                 .attr('y', court_yScale(-4))
-                .attr('width', 1)
-                .attr('height', court_yScale(10)-court_yScale(-4))
+                .attr('width', 0.3)
+                .attr('height', court_yScale(9.5)-court_yScale(-4))
                 .style('fill', 'none')
                 .style('stroke', 'black');
     
         CornerThreeRight
-                .attr('x', court_xScale(22))
+                .attr('x', court_xScale(21))
                 .attr('y', court_yScale(-4))
-                .attr('width', 1)
-                .attr('height', court_yScale(10)-court_yScale(-4))
+                .attr('width', 0.3)
+                .attr('height', court_yScale(9.5)-court_yScale(-4))
                 .style('fill', 'none')
                 .style('stroke', 'black');
     
@@ -189,19 +196,19 @@ function shotchart(player_id) {
             .data(response)
             .enter()
             .append("circle")
-            .attr("cx", (d => xLinearScale(d.x)*(-1)))
+            .attr("cx", (d => xLinearScale(d.x*(-1))))
             .attr("cy", (d => height - yLinearScale(d.y)))
-            .attr("r", "3.5")
-            .attr("fill", "orange")
+            .attr("r", "3")
             .attr("stroke", "grey")
-            .attr("opacity", "1");
+            .attr("opacity", "1")
+            .attr("fill", (d => d.class))
         
         //Add tooltip on circles
         var toolTip = d3.tip()
             .attr("class", "tooltip")
             .offset([80, -60])
             .html(function(d) {
-              return (`<strong>${d.home} v ${d.away} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
+              return (`<strong>${d.away} @ ${d.home} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
                     ${d.day}/${d.month}/${d.year} <br>
                     ${d.action_type}<br>
                     ${d.shot_distance}ft. ${d.shot_type}`);

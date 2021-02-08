@@ -16,12 +16,11 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
 ###NPA API
+from nbapy import game, shot_chart
 from nba_api.stats.static import players
 import nba_api.stats.endpoints
 from nba_api.stats.static import teams
-from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import commonplayerinfo
-from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
 
 # Flask Setup
 #################################################
@@ -166,19 +165,17 @@ def playerstats(id=None):
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):
     
-    player_shotchart = shotchartdetail.ShotChartDetail(player_id=player_id,
-                                                        team_id=0, 
-                                                        season_nullable='2018-19')
-    
-    data = player_shotchart.get_data_frames()
-    df = data[0]
+    shot_charts = shot_chart.ShotChart(player_id=player_id, season="2018-19").shot_chart()
+    shot_charts["MADE_MISS"] = ['green' if x == 1 else 'red' for x in shot_charts['SHOT_MADE_FLAG']]
+
+    df = shot_charts
     allshots = []
     for index, row in df.iterrows():
         shot = {}
         shot["index"] = index
         shot["year"] = row["GAME_DATE"][0:4]
-        shot["month"] = row["GAME_DATE"][4:6]
-        shot["day"] = row["GAME_DATE"][6:8]
+        shot["day"] = row["GAME_DATE"][4:6]
+        shot["month"] = row["GAME_DATE"][6:8]
         shot["game_id"] = row["GAME_ID"]
         shot["team"] = row["TEAM_NAME"]
         shot["name"] = row["PLAYER_NAME"]
@@ -188,11 +185,14 @@ def shotcharts(player_id=None):
         shot["action_type"] = row["ACTION_TYPE"]
         shot["shot_type"] = row["SHOT_TYPE"]
         shot["shot_distance"] = row["SHOT_DISTANCE"]
+        shot["shot_made"] = row["SHOT_MADE_FLAG"]
+        shot["class"] = row["MADE_MISS"]            
         shot["x"] = row["LOC_X"]
         shot["y"] = row["LOC_Y"]
         shot["home"] = row["HTM"]
         shot["away"] = row["VTM"] 
         allshots.append(shot)
+
     return jsonify(allshots)
 
 @app.route("/api/stats")
