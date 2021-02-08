@@ -215,7 +215,7 @@ var svgWidth = window.innerWidth;
     
 var svgHeight = window.innerHeight;
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40};
+var margin = {top: 20, right: 40, bottom: 30, left: 40};
         
 var width = svgWidth - margin.left - margin.right;
 
@@ -234,8 +234,6 @@ var height = svgHeight - margin.top - margin.bottom;
 
 function redraw(){
     var url ="/api/stats"
-
-
 // load data
 d3.json(url).then(function(data) {
 
@@ -243,27 +241,24 @@ d3.json(url).then(function(data) {
   data.forEach(function(d) {
     d[ySelection] = +d[ySelection];
     d[xSelection] = +d[xSelection];
-    //console.log (d.School);
-//console.dir (d);
   });
+
 
 
   // don't want dots overlapping axis, so add in buffer to data domain
   xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
   yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
 
-// scales w/o extra padding
-//  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
-//  yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
 
-svg.selectAll("g").remove();
-svg.selectAll("text").remove();
+chartGroup.selectAll("g").remove();
+chartGroup.selectAll("text").remove();
   // x-axis
-  svg.append("g")
+var xaxis = chartGroup.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-    .append("text")
+      .attr("transform", `translate(0, ${height})`)
+      .call(xAxis);
+
+    xaxis.append("text")
       .attr("class", "label")
       .attr("x", width)
       .attr("y", -6)
@@ -273,10 +268,10 @@ svg.selectAll("text").remove();
 
 
   // y-axis
-  svg.append("g")
+  var yaxis = chartGroup.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
+      .call(yAxis);
+    yaxis.append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -285,30 +280,39 @@ svg.selectAll("text").remove();
       .text(ySelection);
 
   // draw dots
-  svg.selectAll(".dot")
+  var circlegroup = chartGroup.selectAll(".dot")
       .data(data)
       .enter().append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap)
-      .style("fill", function(d) { return color(cValue(d));}) 
-      .on("mouseover", function(d) {
-        tooltip.transition()
-             .duration(200)
-             .style("opacity", .9);
-             tooltip.html(`${d.Player_name} <br>(${xSelection}: ${d[xValue]},${d[yValue]})`)
-             .style("left", (d3.event.pageX + 10) + "px")
-             .style("top", (d3.event.pageY - 28) + "px");
-    })
-      .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-      });
+      .style("fill", function(d) { return color(cValue(d));}) ;
+      
+    // circlegroup.on("mouseover", function(d) {
+    //     tooltip.transition()
+    //          .duration(200)
+    //          .style("opacity", .9);
+    //          tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
+    //          .style("left", (d3.event.pageX + 10) + "px")
+    //          .style("top", (d3.event.pageY - 28) + "px");
+    // })
+    //   .on("mouseout", function(d) {
+    //       tooltip.transition()
+    //            .duration(500)
+    //            .style("opacity", 0);
+    //   });
+    chartGroup.call(toolTip)
+    circlegroup.on("click", function(data) {
+        toolTip.show(data, this);
+      })
+        // onmouseout event
+        .on("mouseout", function(data, index) {
+          toolTip.hide(data);
+        });
 
 
-  svg.selectAll("circle")
+  chartGroup.selectAll("circle")
                        .data(data)
                        .transition()
                        .duration(1000)
@@ -316,17 +320,18 @@ svg.selectAll("text").remove();
                         .attr("cy", yMap);
 
 
-      svg.selectAll(".dot")
+      chartGroup.selectAll(".dot")
       .data(data)
              .exit()
              .remove()
   // draw legend
   
-  var legend = svg.selectAll(".legend")
+  var legend = chartGroup.selectAll(".legend")
       .data(color.domain())
-    .enter().append("g")
+      .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(10," + (i+7) * 20 + ")"; });
+      .attr("id",function(d){return d;})
+      .attr("transform", function(d, i) { return "translate(10," + (i) * 20 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
@@ -341,7 +346,13 @@ svg.selectAll("text").remove();
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
-      .text(function(d) { return d;})
+      .text(function(d) { return d;});
+
+    d3.select("#PF-SF").remove()
+    d3.select("#SF-SG").remove()
+    d3.select("#SG-PF").remove()
+    d3.select("#C-PF").remove()
+    d3.select("#SG-SF").remove()
       
 
 });
@@ -366,14 +377,20 @@ color = d3.scaleOrdinal(d3.schemeCategory10);
 // add the graph canvas to the body of the webpage
 var svg = d3.select("#bubble").append("svg")
     .attr("width", svgWidth)
-    .attr("height", svgHeight)
-    .append("g")
+    .attr("height", svgHeight);
+var chartGroup= svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // add the tooltip area to the webpage
-var tooltip = d3.select("#bubble").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+// var tooltip = d3.select("#bubble").append("div")
+//     .attr("class", "tooltip")
+//     .style("opacity", 0);
+var toolTip = d3.tip()
+.attr("class", "tooltip")
+.offset([80, -60])
+.html(function(d) {
+  return (`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`);
+});
 
 // load data
 d3.json(url).then(function(data) {
@@ -382,24 +399,22 @@ d3.json(url).then(function(data) {
   data.forEach(function(d) {
     d[ySelection] = +d[ySelection];
     d[xSelection] = +d[xSelection];
-//console.log (d.School);
-//console.dir (d);
+// console.dir (d);
   });
+
 
   // don't want dots overlapping axis, so add in buffer to data domain
   xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
   yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
 
-// scales w/o extra padding
-//  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
-//  yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
 
   // x-axis
-  var xaxis = svg.append("g")
+  var xaxis = chartGroup.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
-   xaxis .append("text")
+      
+      xaxis.append("text")
       .attr("class", "label")
       .attr("x", width)
       .attr("y", -6)
@@ -408,10 +423,11 @@ d3.json(url).then(function(data) {
       .text(xSelection);
 
   // y-axis
-  var yaxis= svg.append("g")
+    var yaxis =chartGroup.append("g")
       .attr("class", "y axis")
       .call(yAxis);
-    yaxis.append("text")
+
+      yaxis.append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -422,35 +438,45 @@ d3.json(url).then(function(data) {
 
 
   // draw dots
-  svg.selectAll(".dot")
+  var circlegroup = chartGroup.selectAll(".dot")
       .data(data)
-    .enter().append("circle")
+      .enter()
+      .append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap)
-      .style("fill", function(d) { return color(cValue(d));}) 
-      .on("mouseover", function(d) {
-        tooltip.transition()
-             .duration(200)
-             .style("opacity", .9);
-             tooltip.html(`${d.Player_name} <br/> <br/>(${xSelection}: ${d[xValue]}, ${ySelection}:${d[yValue]})`)
-             .style("left", (d3.event.pageX + 10) + "px")
-             .style("top", (d3.event.pageY - 28) + "px");
-    })
-      .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-      });
+      .style("fill", function(d) { return color(cValue(d));});
+
+    //   circlegroup.on("mouseover", function(d) {
+    //     tooltip.transition()
+    //          .duration(200)
+    //          .style("opacity", .9);
+    //          tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
+    //          .style("left", (d3.event.pageX + 10) + "px")
+    //          .style("top", (d3.event.pageY - 28) + "px");
+    // })
+    //   .on("mouseout", function(d) {
+    //       tooltip.transition()
+    //            .duration(500)
+    //            .style("opacity", 0);
+    //   });
+    chartGroup.call(toolTip)
+    circlegroup.on("click", function(data) {
+        toolTip.show(data, this);
+      })
+        // onmouseout event
+        .on("mouseout", function(data, index) {
+          toolTip.hide(data);
+        });
 
   // draw legend
-  var legend = svg.selectAll(".legend")
+  var legend = chartGroup.selectAll(".legend")
       .data(color.domain())
     .enter().append("g")
       .attr("class", "legend")
       .attr("id",function(d){return d})
-      .attr("transform", function(d, i) { return "translate(10," + (i+7) * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(10," + (i) * 20 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
@@ -468,20 +494,14 @@ d3.json(url).then(function(data) {
       .text(function(d) { 
         return d;})
 
+//remove extra legend labels 
     d3.select("#PF-SF").remove()
     d3.select("#SF-SG").remove()
     d3.select("#SG-PF").remove()
     d3.select("#C-PF").remove()
     d3.select("#SG-SF").remove()
    
-   
-   
-   
-   
 });
-
-
-
 
 
 
