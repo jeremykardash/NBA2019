@@ -249,8 +249,8 @@ d3.json(url).then(function(data) {
 
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-  yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)]);
 
 // scales w/o extra padding
 //  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
@@ -390,12 +390,12 @@ d3.json(url).then(function(data) {
   });
 
   // don't want dots overlapping axis, so add in buffer to data domain
-//   xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-//   yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)]);
 
 // scales w/o extra padding
- xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
- yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
+//  xScale.domain([d3.min(data, xValue), d3.max(data, xValue)]);
+//  yScale.domain([d3.min(data, yValue), d3.max(data, yValue)]);
 
   // x-axis
   svg.append("g")
