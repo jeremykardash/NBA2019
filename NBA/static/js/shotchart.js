@@ -250,38 +250,77 @@ function getInfo(player_id) {
     })
 };
 
-//Function for player stats for 2018-2019 season
-function getStats(player_id) {
-    //Url calls argument from function
-    var url = `api/playerstats/${player_id}`
-
-    //access API
-    d3.json(url).then(data=> {
-
-        var data = data[0]
-        //Select the metadata area to input
-        var playerStats = d3.select('#player-stats');
-
-        //Clear output
-        playerStats.html('')
-        
-        //Inout entries
-        Object.entries(data).forEach((key) => {   
-            playerStats.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
-        });
-    })
-};
-
-function table(player_id) {
-    var tbody = d3.select('tbody')
-    tbody.html('')
+function table_volume(player_id) {
+    var tbody = d3.selectAll('tbody')
+    var volume_body = d3.select("#volume-body")
+    volume_body.html('')
     var url = `api/volume/${player_id}`
     d3.json(url).then(data=>{
         
 
         data.forEach(function(location){
-            var row = tbody.append('tr');
+            var row = volume_body.append('tr');
             Object.entries(location).forEach(([key, value]) => {
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+}
+
+function table_info(player_id) {
+    var tbody = d3.selectAll('tbody')
+    var info_body = d3.select(".info-body")
+    info_body.html('')
+    var url = `/api/playerinfo/${player_id}`
+    d3.json(url).then(data=>{
+        
+
+        data.forEach(function(info){
+            var row = info_body.append('tr');
+            Object.entries(info).forEach(([key, value]) => {
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+}
+
+function table_gamelog(player_id) {
+    var tbody = d3.selectAll('tbody')
+    var game_body = d3.select("#gamelog-body")
+    game_body.html('')
+    var url = `/api/gamelog/${player_id}`
+    d3.json(url).then(data=>{
+        
+
+        data.forEach(function(game){
+            var row = game_body.append('tr');
+            Object.entries(game).forEach(([key, value]) => {
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+}
+
+function table_stats(player_id) {
+    var tbody = d3.selectAll('tbody')
+    var stats_body = d3.select("#stats-body")
+    stats_body.html('')
+    var url = `/api/seasonstats/${player_id}`
+    d3.json(url).then(data=>{
+        
+
+        data.forEach(function(game){
+            var row = stats_body.append('tr');
+            Object.entries(game).forEach(([key, value]) => {
                 var cell = row.append("td");
                 cell.text(value);
         })
@@ -295,8 +334,10 @@ function table(player_id) {
 function init() {
     shotchart(2544);
     getInfo(2544);
-    getStats(2544);
-    table(2544)
+    table_stats(2544);
+    table_volume(2544)
+    table_info(2544)
+    table_gamelog(2544)
     // select dropdown menu item
     var dropdown_team = d3.select("#teamID");
     var dropdown_player = d3.select("#playerID");
@@ -338,8 +379,10 @@ function init() {
             //Run shotchart, info and stats functions
             shotchart(player_value);
             getInfo(player_value);
-            getStats(player_value);
-            table(player_value)
+            table_stats(player_value);
+            table_volume(player_value)
+            table_info(player_value)
+            table_gamelog(player_value)
             
         })
 
