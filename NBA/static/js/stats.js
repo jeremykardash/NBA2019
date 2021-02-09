@@ -6,6 +6,7 @@ d3.json(url).then(function(response){
 }
 test();
 
+// creating dropdown menu items
 var url ="/api/stats"
 var dropdownone = d3.select("#x-stat")
     var dropdowntwo = d3.select("#y-stat")
@@ -22,13 +23,13 @@ d3.json(url).then(function(response){
     });
 })
 
+//select dropdown items and set as axes 
 var xSelection ="Points";
 var ySelection ="Assists";
 
 function reportX(period) {
   if (period=="") return; // please select - possibly you want something else here
 xSelection = period;
-
 
 redraw();
 } 
@@ -50,8 +51,6 @@ var width = svgWidth - margin.left - margin.right;
 
 var height = svgHeight - margin.top - margin.bottom;
 
-
-
 //console.log (margin);
 /* 
  * value accessor - returns the value to encode for a given data object.
@@ -60,47 +59,46 @@ var height = svgHeight - margin.top - margin.bottom;
  * axis - sets up axis
  */ 
 
-
+// function to redraw the graph after selecting new axes for chart 
 function redraw(){
     var url ="/api/stats"
 // load data
 d3.json(url).then(function(data) {
 
-  // change string (from CSV) into number format
+  // change string into number format
   data.forEach(function(d) {
     d[ySelection] = +d[ySelection];
     d[xSelection] = +d[xSelection];
   });
 
-
-
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+.5]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+.5]);
 
 
 chartGroup.selectAll("g").remove();
 chartGroup.selectAll("text").remove();
-  // x-axis
+  
+// x-axis
 var xaxis = chartGroup.append("g")
       .attr("class", "x axis")
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
-
-    xaxis.append("text")
+// add x-label
+    chartGroup.append("text")
       .attr("class", "label")
       .attr("x", width)
-      .attr("y", -6)
+      .attr("y", 580)
       .style("text-anchor", "end")
       .text(xSelection);
-
-
 
   // y-axis
   var yaxis = chartGroup.append("g")
       .attr("class", "y axis")
       .call(yAxis);
-    yaxis.append("text")
+
+    //add y-label
+    chartGroup.append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -116,29 +114,23 @@ var xaxis = chartGroup.append("g")
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap)
-      .style("fill", function(d) { return color(cValue(d));}) ;
+      .style("fill", function(d) { return color(cValue(d));});
+
       
-    // circlegroup.on("mouseover", function(d) {
-    //     tooltip.transition()
-    //          .duration(200)
-    //          .style("opacity", .9);
-    //          tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
-    //          .style("left", (d3.event.pageX + 10) + "px")
-    //          .style("top", (d3.event.pageY - 28) + "px");
-    // })
-    //   .on("mouseout", function(d) {
-    //       tooltip.transition()
-    //            .duration(500)
-    //            .style("opacity", 0);
-    //   });
-    chartGroup.call(toolTip)
-    circlegroup.on("click", function(data) {
-        toolTip.show(data, this);
-      })
-        // onmouseout event
-        .on("mouseout", function(data, index) {
-          toolTip.hide(data);
-        });
+    circlegroup.on("mouseover", function(d) {
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+             tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+      });
+   
 
 
   chartGroup.selectAll("circle")
@@ -153,8 +145,8 @@ var xaxis = chartGroup.append("g")
       .data(data)
              .exit()
              .remove()
+
   // draw legend
-  
   var legend = chartGroup.selectAll(".legend")
       .data(color.domain())
       .enter().append("g")
@@ -177,27 +169,26 @@ var xaxis = chartGroup.append("g")
       .style("text-anchor", "end")
       .text(function(d) { return d;});
 
+    //remove extra legend labels
     d3.select("#PF-SF").remove()
     d3.select("#SF-SG").remove()
     d3.select("#SG-PF").remove()
     d3.select("#C-PF").remove()
     d3.select("#SG-SF").remove()
-      
-
 });
+};
 
-}
 // setup x 
 var xValue = function(d) { return d[xSelection];}; // data -> value
-    var xScale = d3.scaleLinear().range([0, width]);// value -> display
-	var xMap = function(d) { return xScale(xValue(d));}; // data -> display
-	var xAxis = d3.axisBottom(xScale);
+var xScale = d3.scaleLinear().range([0, width]);// value -> display
+var xMap = function(d) { return xScale(xValue(d));}; // data -> display
+var xAxis = d3.axisBottom(xScale);
 
 // setup y
 var yValue = function(d) { return d[ySelection];}; // data -> value
-    var yScale = d3.scaleLinear().range([height, 0]); // value -> display
-	var yMap = function(d) { return yScale(yValue(d));}; // data -> display
-	var yAxis = d3.axisLeft(yScale);
+var yScale = d3.scaleLinear().range([height, 0]); // value -> display
+var yMap = function(d) { return yScale(yValue(d));}; // data -> display
+var yAxis = d3.axisLeft(yScale);
 
 // setup fill color
 var cValue = function(d) { return d.Position;},
@@ -211,30 +202,26 @@ var chartGroup= svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // add the tooltip area to the webpage
-// var tooltip = d3.select("#bubble").append("div")
-//     .attr("class", "tooltip")
-//     .style("opacity", 0);
-var toolTip = d3.tip()
-.attr("class", "tooltip")
-.offset([80, -60])
-.html(function(d) {
-  return (`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`);
-});
+var tooltip = d3.select("#bubble").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 
 // load data
 d3.json(url).then(function(data) {
 
-  // change string (from CSV) into number format
+  // change string into number format
   data.forEach(function(d) {
     d[ySelection] = +d[ySelection];
     d[xSelection] = +d[xSelection];
 // console.dir (d);
   });
 
+ 
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+0.5]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+0.5]);
+  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+.5]);
+  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+.5]);
 
 
   // x-axis
@@ -243,11 +230,10 @@ d3.json(url).then(function(data) {
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
       
-      xaxis.append("text")
+      chartGroup.append("text")
       .attr("class", "label")
       .attr("x", width)
-      .attr("y", -6)
-      .attr("font-size",10)
+      .attr("y", 580)
       .style("text-anchor", "end")
       .text(xSelection);
 
@@ -256,7 +242,7 @@ d3.json(url).then(function(data) {
       .attr("class", "y axis")
       .call(yAxis);
 
-      yaxis.append("text")
+      chartGroup.append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -277,27 +263,21 @@ d3.json(url).then(function(data) {
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
 
-    //   circlegroup.on("mouseover", function(d) {
-    //     tooltip.transition()
-    //          .duration(200)
-    //          .style("opacity", .9);
-    //          tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
-    //          .style("left", (d3.event.pageX + 10) + "px")
-    //          .style("top", (d3.event.pageY - 28) + "px");
-    // })
-    //   .on("mouseout", function(d) {
-    //       tooltip.transition()
-    //            .duration(500)
-    //            .style("opacity", 0);
-    //   });
-    chartGroup.call(toolTip)
-    circlegroup.on("click", function(data) {
-        toolTip.show(data, this);
-      })
-        // onmouseout event
-        .on("mouseout", function(data, index) {
-          toolTip.hide(data);
-        });
+    //tooltip on circle group 
+      circlegroup.on("mouseover", function(d) {
+        tooltip.transition()
+             .duration(200)
+             .style("opacity", .9);
+             tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 28) + "px");
+    })
+             .on("mouseout", function(d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                });
+   
 
   // draw legend
   var legend = chartGroup.selectAll(".legend")
