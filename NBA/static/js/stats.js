@@ -42,9 +42,9 @@ ySelection = period;
 redraw();
 } 
 
-var svgWidth = window.innerWidth;
+var svgWidth = 600;
     
-var svgHeight = window.innerHeight;
+var svgHeight = 600;
 
 var margin = {top: 20, right: 40, bottom: 30, left: 40};
         
