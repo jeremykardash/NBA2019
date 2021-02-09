@@ -46,7 +46,7 @@ var svgWidth = 600;
     
 var svgHeight = 600;
 
-var margin = {top: 20, right: 40, bottom: 30, left: 40};
+var margin = {top: 20, right: 40, bottom: 50, left: 50};
         
 var width = svgWidth - margin.left - margin.right;
 
@@ -87,11 +87,10 @@ var xaxis = chartGroup.append("g")
       .call(xAxis);
 // add x-label
     chartGroup.append("text")
-      .attr("class", "label")
-      .attr("x", width)
-      .attr("y", 580)
-      .attr("font-size",12)
-      .style("text-anchor", "end")
+      .attr("x", width-280)
+      .attr("y", height+40)
+      .attr("font-size","15")
+      .attr("font-weight","bold")
       .text(xSelection);
 
   // y-axis
@@ -101,12 +100,12 @@ var xaxis = chartGroup.append("g")
 
     //add y-label
     chartGroup.append("text")
-      .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
+      .attr("y", height-570)
+      .attr("x", width-750)
+      .attr("font-size","15")
+      .attr("font-weight","bold")
       .attr("dy", ".71em")
-      .attr("font-size",12)
-      .style("text-anchor", "end")
       .text(ySelection);
 
   // draw dots
@@ -238,11 +237,10 @@ d3.json(url).then(function(data) {
       .call(xAxis);
       
       chartGroup.append("text")
-      .attr("class", "label")
-      .attr("x", width)
-      .attr("y", 580)
-      .attr("font-size",12)
-      .style("text-anchor", "end")
+      .attr("x", width-280)
+      .attr("y", height+40)
+      .attr("font-size","15")
+      .attr("font-weight","bold")
       .text(xSelection);
 
   // y-axis
@@ -251,12 +249,12 @@ d3.json(url).then(function(data) {
       .call(yAxis);
 
       chartGroup.append("text")
-      .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("font-size",12)
+      .attr("y", height-570)
+      .attr("x", width-750)
+      .attr("font-size","15")
       .attr("dy", ".71em")
-      .style("text-anchor", "end")
+      .attr("font-weight","bold")
       .text(ySelection);
 
 
