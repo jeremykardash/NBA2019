@@ -173,32 +173,16 @@ var xaxis = chartGroup.append("g")
       .text(function(d) { return d;});
 
     //remove extra legend labels
-    d3.select("#PF-SF").remove()
-    d3.select("#SF-SG").remove()
-    d3.select("#SG-PF").remove()
-    d3.select("#C-PF").remove()
-    d3.select("#SG-SF").remove()
+    d3.select("#PF-SF").remove();
+    d3.select("#SF-SG").remove();
+    d3.select("#SG-PF").remove();
+    d3.select("#C-PF").remove();
+    d3.select("#SG-SF").remove();
 
-//rename dropdown text
-d3.selectAll("#Drb").text("Defensive Rebounds")
-d3.selectAll("#Player_name").remove()
-d3.selectAll("#Player_id").remove()
-d3.selectAll("#Position").remove()
-d3.selectAll("#Orb").text("Offensive Rebounds")
-d3.selectAll("#Trb").text("Total Rebounds")
-d3.selectAll("#Tov").text("Turnovers")
-d3.selectAll("#TwoP_m").text("2PT Made")
-d3.selectAll("#TwoP_a").text("2PT Attempts")
-d3.selectAll("#TwoP_percent").text("2PT %")
-d3.selectAll("#ThreeP_a").text("3PT Attempts")
-d3.selectAll("#ThreeP_m").text("3PT Made")
-d3.selectAll("#ThreeP_percent").text("3PT %")
-d3.selectAll("#Fgm").text("Field-Goal Made")
-d3.selectAll("#Fga").text("Field-Goal Attempts")
-d3.selectAll("#Fg_percent").text("Field-Goal %")
-d3.selectAll("#Ftm").text("Free-Throw Made")
-d3.selectAll("#Fta").text("Free-Throw Attempts")
-d3.selectAll("#Ft_percent").text("Free-Throw %")
+//remove unncessary dropdown menu items
+d3.selectAll("#Player_name").remove();
+d3.selectAll("#Player_id").remove();
+d3.selectAll("#Position").remove();
 });
 };
 
@@ -329,32 +313,16 @@ d3.json(url).then(function(data) {
         return d;})
 
 //remove extra legend labels 
-    d3.select("#PF-SF").remove()
-    d3.select("#SF-SG").remove()
-    d3.select("#SG-PF").remove()
-    d3.select("#C-PF").remove()
-    d3.select("#SG-SF").remove()
+    d3.select("#PF-SF").remove();
+    d3.select("#SF-SG").remove();
+    d3.select("#SG-PF").remove();
+    d3.select("#C-PF").remove();
+    d3.select("#SG-SF").remove();
 
-//rename dropdown text
-d3.selectAll("#Drb").text("Defensive Rebounds")
-d3.selectAll("#Player_name").remove()
-d3.selectAll("#Player_id").remove()
-d3.selectAll("#Position").remove()
-d3.selectAll("#Orb").text("Offensive Rebounds")
-d3.selectAll("#Trb").text("Total Rebounds")
-d3.selectAll("#Tov").text("Turnovers")
-d3.selectAll("#TwoP_m").text("2PT Made")
-d3.selectAll("#TwoP_a").text("2PT Attempts")
-d3.selectAll("#TwoP_percent").text("2PT %")
-d3.selectAll("#ThreeP_a").text("3PT Attempts")
-d3.selectAll("#ThreeP_m").text("3PT Made")
-d3.selectAll("#ThreeP_percent").text("3PT %")
-d3.selectAll("#Fgm").text("Field-Goal Made")
-d3.selectAll("#Fga").text("Field-Goal Attempts")
-d3.selectAll("#Fg_percent").text("Field-Goal %")
-d3.selectAll("#Ftm").text("Free-Throw Made")
-d3.selectAll("#Fta").text("Free-Throw Attempts")
-d3.selectAll("#Ft_percent").text("Free-Throw %")
+//remove unncessary dropdown menu items
+d3.selectAll("#Player_name").remove();
+d3.selectAll("#Player_id").remove();
+d3.selectAll("#Position").remove();
    
 });
 
