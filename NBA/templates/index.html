@@ -14,19 +14,27 @@
 
     <div id='description'></div>
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-4">
             <p>
-                <span>
+                <!-- <span>
                     <label for="x-axis">Select X-axis</label>
-                </span>
+                </span> -->
+                <i>Select X-axis</i>
                 <select id="x-stat" onchange="reportX(this.value)"></select>
+                <br>
+                <b>vs.</b>
+                <br>
+                <i>Select Y-axis</i>
+                <select id="y-stat" onchange="reportY(this.value)"></select>
+                <br>
+                <b>Stats per game</b>
             </p>
-            <p>
+            <!-- <p>
                 <span>
                     <label for="y-axis">Select Y-axis</label>
                 </span>
                 <select id="y-stat" onchange="reportY(this.value)"></select>
-            </p>
+            </p> -->
             <!-- <button onclick="setGraph()">submit</button> -->
           <div id="bubble"></div>
         </div>

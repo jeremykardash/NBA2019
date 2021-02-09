@@ -118,6 +118,7 @@ var xaxis = chartGroup.append("g")
       .attr("cx", xMap)
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
+     
 
       
     circlegroup.on("mouseover", function(d) {
@@ -133,8 +134,6 @@ var xaxis = chartGroup.append("g")
                .duration(500)
                .style("opacity", 0);
       });
-   
-
 
   chartGroup.selectAll("circle")
                        .data(data)
@@ -173,11 +172,11 @@ var xaxis = chartGroup.append("g")
       .text(function(d) { return d;});
 
     //remove extra legend labels
-    d3.select("#PF-SF").remove();
-    d3.select("#SF-SG").remove();
-    d3.select("#SG-PF").remove();
-    d3.select("#C-PF").remove();
-    d3.select("#SG-SF").remove();
+    // d3.select("#PF-SF").remove();
+    // d3.select("#SF-SG").remove();
+    // d3.select("#SG-PF").remove();
+    // d3.select("#C-PF").remove();
+    // d3.select("#SG-SF").remove();
 
 //remove unncessary dropdown menu items
 d3.selectAll("#Player_name").remove();
@@ -313,11 +312,11 @@ d3.json(url).then(function(data) {
         return d;})
 
 //remove extra legend labels 
-    d3.select("#PF-SF").remove();
-    d3.select("#SF-SG").remove();
-    d3.select("#SG-PF").remove();
-    d3.select("#C-PF").remove();
-    d3.select("#SG-SF").remove();
+    // d3.select("#PF-SF").remove();
+    // d3.select("#SF-SG").remove();
+    // d3.select("#SG-PF").remove();
+    // d3.select("#C-PF").remove();
+    // d3.select("#SG-SF").remove();
 
 //remove unncessary dropdown menu items
 d3.selectAll("#Player_name").remove();
