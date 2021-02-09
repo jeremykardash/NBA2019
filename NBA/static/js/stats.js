@@ -16,11 +16,12 @@ d3.json(url).then(function(response){
     var keys = Object.keys(response[0])
 
     keys.forEach((key)=>{
-        dropdownone.append("option").text(key).property("value",key)
+        dropdownone.append("option").text(key).property("value",key).attr("id",key)
     });
     keys.forEach((key)=>{
-        dropdowntwo.append("option").text(key).property("value",key)
+        dropdowntwo.append("option").text(key).property("value",key).attr("id",key)
     });
+
 })
 
 //select dropdown items and set as axes 
@@ -89,6 +90,7 @@ var xaxis = chartGroup.append("g")
       .attr("class", "label")
       .attr("x", width)
       .attr("y", 580)
+      .attr("font-size",12)
       .style("text-anchor", "end")
       .text(xSelection);
 
@@ -103,6 +105,7 @@ var xaxis = chartGroup.append("g")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
+      .attr("font-size",12)
       .style("text-anchor", "end")
       .text(ySelection);
 
@@ -175,6 +178,27 @@ var xaxis = chartGroup.append("g")
     d3.select("#SG-PF").remove()
     d3.select("#C-PF").remove()
     d3.select("#SG-SF").remove()
+
+//rename dropdown text
+d3.selectAll("#Drb").text("Defensive Rebounds")
+d3.selectAll("#Player_name").remove()
+d3.selectAll("#Player_id").remove()
+d3.selectAll("#Position").remove()
+d3.selectAll("#Orb").text("Offensive Rebounds")
+d3.selectAll("#Trb").text("Total Rebounds")
+d3.selectAll("#Tov").text("Turnovers")
+d3.selectAll("#TwoP_m").text("2PT Made")
+d3.selectAll("#TwoP_a").text("2PT Attempts")
+d3.selectAll("#TwoP_percent").text("2PT %")
+d3.selectAll("#ThreeP_a").text("3PT Attempts")
+d3.selectAll("#ThreeP_m").text("3PT Made")
+d3.selectAll("#ThreeP_percent").text("3PT %")
+d3.selectAll("#Fgm").text("Field-Goal Made")
+d3.selectAll("#Fga").text("Field-Goal Attempts")
+d3.selectAll("#Fg_percent").text("Field-Goal %")
+d3.selectAll("#Ftm").text("Free-Throw Made")
+d3.selectAll("#Fta").text("Free-Throw Attempts")
+d3.selectAll("#Ft_percent").text("Free-Throw %")
 });
 };
 
@@ -234,6 +258,7 @@ d3.json(url).then(function(data) {
       .attr("class", "label")
       .attr("x", width)
       .attr("y", 580)
+      .attr("font-size",12)
       .style("text-anchor", "end")
       .text(xSelection);
 
@@ -246,7 +271,7 @@ d3.json(url).then(function(data) {
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
-      .attr("font-size",10)
+      .attr("font-size",12)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text(ySelection);
@@ -309,6 +334,27 @@ d3.json(url).then(function(data) {
     d3.select("#SG-PF").remove()
     d3.select("#C-PF").remove()
     d3.select("#SG-SF").remove()
+
+//rename dropdown text
+d3.selectAll("#Drb").text("Defensive Rebounds")
+d3.selectAll("#Player_name").remove()
+d3.selectAll("#Player_id").remove()
+d3.selectAll("#Position").remove()
+d3.selectAll("#Orb").text("Offensive Rebounds")
+d3.selectAll("#Trb").text("Total Rebounds")
+d3.selectAll("#Tov").text("Turnovers")
+d3.selectAll("#TwoP_m").text("2PT Made")
+d3.selectAll("#TwoP_a").text("2PT Attempts")
+d3.selectAll("#TwoP_percent").text("2PT %")
+d3.selectAll("#ThreeP_a").text("3PT Attempts")
+d3.selectAll("#ThreeP_m").text("3PT Made")
+d3.selectAll("#ThreeP_percent").text("3PT %")
+d3.selectAll("#Fgm").text("Field-Goal Made")
+d3.selectAll("#Fga").text("Field-Goal Attempts")
+d3.selectAll("#Fg_percent").text("Field-Goal %")
+d3.selectAll("#Ftm").text("Free-Throw Made")
+d3.selectAll("#Fta").text("Free-Throw Attempts")
+d3.selectAll("#Ft_percent").text("Free-Throw %")
    
 });
 
