@@ -21,6 +21,7 @@ from nba_api.stats.static import players
 import nba_api.stats.endpoints
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import commonplayerinfo
+import pandas as pd
 
 # Flask Setup
 #################################################
@@ -97,7 +98,6 @@ def playerinfo(id=None):
     player_data = []
     for index, row in df.iterrows():
         data = {}
-        data["index"] = index
         data["player_id"] = row["PERSON_ID"]
         data["name"] = row["DISPLAY_FIRST_LAST"]
         data["school"] = row["SCHOOL"]
@@ -160,6 +160,52 @@ def playerstats(id=None):
    
     return jsonify(all_stats)
 
+@app.route("/api/volume/<player_id>")
+def volume(player_id=None):
+    shot_charts = shot_chart.ShotChart(player_id=player_id, season="2018-19").shot_chart()
+
+    df = pd.DataFrame(shot_charts["SHOT_TYPE"].value_counts())
+    df['Volume'] = (df["SHOT_TYPE"]/df["SHOT_TYPE"].sum()).astype(float).map('{:,.2%}'.format)
+    shot_type_pct = df[["Volume"]]
+    df_2 = shot_charts[['SHOT_TYPE', "SHOT_MADE_FLAG"]]
+    df_2 = df_2.rename(columns={"SHOT_TYPE": "Shot Type","SHOT_MADE_FLAG": "FG%"})
+    fg_type = df_2.groupby(["Shot Type"]).mean()
+    fg_type["FG%"] = fg_type["FG%"].map('{:,.2%}'.format)
+    merged_type = pd.merge(shot_type_pct, fg_type, left_index=True, right_index=True)
+
+    df = pd.DataFrame(shot_charts["SHOT_ZONE_BASIC"].value_counts())
+    df['Volume'] = (df["SHOT_ZONE_BASIC"]/df["SHOT_ZONE_BASIC"].sum()).astype(float).map('{:,.2%}'.format)
+    zone_pct = df[["Volume"]]
+    df_2 = shot_charts[['SHOT_ZONE_BASIC', "SHOT_MADE_FLAG"]]
+    df_2 = df_2.rename(columns={"SHOT_ZONE_BASIC": "Shot Type","SHOT_MADE_FLAG": "FG%"})
+    fg_zone = df_2.groupby(["Shot Type"]).mean()
+    fg_zone["FG%"] = fg_zone["FG%"].map('{:,.2%}'.format)
+    merged_zone = pd.merge(zone_pct, fg_zone, left_index=True, right_index=True)
+
+    df = pd.DataFrame(shot_charts["SHOT_ZONE_RANGE"].value_counts())
+    df['Volume'] = (df["SHOT_ZONE_RANGE"]/df["SHOT_ZONE_RANGE"].sum()).astype(float).map('{:,.2%}'.format)
+    distance_pct = df[["Volume"]]
+    df_2 = shot_charts[['SHOT_ZONE_RANGE', "SHOT_MADE_FLAG"]]
+    df_2 = df_2.rename(columns={"SHOT_ZONE_RANGE": "Shot Distance","SHOT_MADE_FLAG": "FG%"})
+    fg_distance = df_2.groupby(["Shot Distance"]).mean()
+    fg_distance["FG%"] = fg_distance["FG%"].map('{:,.2%}'.format)
+    merged_distance = pd.merge(distance_pct, fg_distance, left_index=True, right_index=True)
+
+    concat = pd.concat([merged_type, merged_zone])
+    final = pd.concat([concat, merged_distance])
+
+    volume = []
+    for index, row in final.iterrows():
+        data = {}
+        data["Location"] = index
+        data["Volume"] = row["Volume"]
+        data["FG%"] = row["FG%"]
+        volume.append(data)
+
+    return jsonify(volume)
+
+
+    
 
 
 @app.route("/api/shotchart/<player_id>")
@@ -167,8 +213,8 @@ def shotcharts(player_id=None):
     
     shot_charts = shot_chart.ShotChart(player_id=player_id, season="2018-19").shot_chart()
     shot_charts["MADE_MISS"] = ['green' if x == 1 else 'red' for x in shot_charts['SHOT_MADE_FLAG']]
-
     df = shot_charts
+    
     allshots = []
     for index, row in df.iterrows():
         shot = {}

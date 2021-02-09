@@ -272,11 +272,31 @@ function getStats(player_id) {
     })
 };
 
+function table(player_id) {
+    var tbody = d3.select('tbody')
+    tbody.html('')
+    var url = `api/volume/${player_id}`
+    d3.json(url).then(data=>{
+        
+
+        data.forEach(function(location){
+            var row = tbody.append('tr');
+            Object.entries(location).forEach(([key, value]) => {
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+}
+
 //Function to initialize the page
 function init() {
     shotchart(2544);
     getInfo(2544);
     getStats(2544);
+    table(2544)
     // select dropdown menu item
     var dropdown_team = d3.select("#teamID");
     var dropdown_player = d3.select("#playerID");
@@ -319,6 +339,7 @@ function init() {
             shotchart(player_value);
             getInfo(player_value);
             getStats(player_value);
+            table(player_value)
             
         })
 
