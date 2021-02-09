@@ -153,7 +153,7 @@ var xaxis = chartGroup.append("g")
       .enter().append("g")
       .attr("class", "legend")
       .attr("id",function(d){return d;})
-      .attr("transform", function(d, i) { return "translate(10," + (i) * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(10," + (i+15) * 20 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
@@ -291,18 +291,18 @@ d3.json(url).then(function(data) {
     .enter().append("g")
       .attr("class", "legend")
       .attr("id",function(d){return d})
-      .attr("transform", function(d, i) { return "translate(10," + (i) * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(10," + (i+15) * 20 + ")"; });
 
   // draw legend colored rectangles
   legend.append("rect")
-      .attr("x", width - 18)
+      .attr("x", width -18)
       .attr("width", 18)
       .attr("height", 18)
       .style("fill", color);
 
   // draw legend text
   legend.append("text")
-      .attr("x", width - 24)
+      .attr("x", width -24)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
