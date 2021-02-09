@@ -148,7 +148,8 @@ function Chord(options, matrix) {
         .attr("d", d3.ribbon()
         .radius(innerRadius)
       )
-        .style("fill", function(d) { return fill(d.source.index); })
+        .style("fill", "lightgrey")
+        .style("stroke", "white")
         .style("opacity", 1)
       .append("svg:title")
         .text(function(d) { 
