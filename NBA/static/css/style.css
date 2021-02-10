@@ -27,7 +27,7 @@
   }
 
 #body_text{
-    padding-top: 300px;
+    padding-top: 10px;
     padding-right: 50px;
     padding-left: 50px;
     font-size:20px
@@ -38,4 +38,11 @@
     background-color: rgb(2, 0, 129);
     color: rgb(255, 255, 255);
 
+}
+
+#barbar{
+  padding-top: 200px;
+  padding-right: 50px;
+  padding-left: 10px;
+  font-size:20px
 }
