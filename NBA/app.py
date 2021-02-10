@@ -23,6 +23,8 @@ from nba_api.stats.static import teams
 from nba_api.stats.endpoints import commonplayerinfo
 import pandas as pd
 
+#pylint: disable=unused-variable
+
 # Flask Setup
 #################################################
 app = Flask(__name__)

@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Player</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     </head>
     
   
@@ -20,7 +20,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                   <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="/player">Players <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link active" href="/player">Players</a>
                   </div>
                 </div>
               </nav>
@@ -30,12 +30,12 @@
         <div class="row">
         <div class="col-sm-12 col-md-4">
           <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-light">
             <h4>Select Player</h4></div>
             <div class="card-body">
-            <p>Pick team and player</p>
-            <select id="teamID"></select>
-            <select id="playerID"></select></div>
+              <br>
+            <select class="form-select" aria-label="Default select example" id="teamID"></select>
+            <select class="form-select" aria-label="Default select example" id="playerID"></select></div>
           </div>
         </div> 
         <div class="col-md-8 col-sm-12">
@@ -43,7 +43,7 @@
             <div class="card-header">
             <h4 class="title">Player Info</h4></div>  
             <div class="card-header">
-                  <table id="info-table" class="table table-striped table-hover">
+                  <table id="info-table" class="table table-striped table-hover table-responsive-lg">
                     <thead>
                       <th class="table-head">Name</th>
                       <th class="table-head">Height</th>
@@ -70,7 +70,7 @@
                 <div class="card-header">
                   <h4 class="title">Player Season Stats 2018-2019</h4></div>
                   <div class="card-body">
-                  <table id="stats-table" class="table table-striped table-hover">
+                  <table id="stats-table" class="table table-striped table-hover table-responsive-lg">
                       <thead>
                           <th class="table-head">W</th>
                           <th class="table-head">L</th>
@@ -139,7 +139,7 @@
                     <div class="card-header">
                     <h4 class="title">Game Log</h4></div>
                     <div class="card-body">
-                    <table id="gamelog-table" class="table table-striped table-hover">
+                    <table id="gamelog-table" class="table table-striped table-hover table-responsive">
                         <thead>
                           <th class="table-head">Date</th>
                           <th class="table-head">Matchup</th>

@@ -228,27 +228,6 @@ function shotchart(player_id) {
         });
         };  
 
-//Function to get player info
-function getInfo(player_id) {
-    //Url calls argument from function
-    var url = `api/playerinfo/${player_id}`
-
-    //Access API
-    d3.json(url).then(data=> {
-        
-        var data = data[0]
-        //Select the metadata area to input
-        var playerInfo = d3.select('#player-info');
-
-        //Clear output
-        playerInfo.html('')
-        
-        //Input entries
-        Object.entries(data).forEach((key) => {   
-            playerInfo.append("p").text(key[0].toUpperCase().replace("_", " ") + ": " + key[1] + "\n");    
-        });
-    })
-};
 
 function table_volume(player_id) {
     var tbody = d3.selectAll('tbody')
@@ -333,7 +312,6 @@ function table_stats(player_id) {
 //Function to initialize the page
 function init() {
     shotchart(2544);
-    getInfo(2544);
     table_stats(2544);
     table_volume(2544)
     table_info(2544)
@@ -370,21 +348,21 @@ function init() {
                         if (player.team_id == input_value) {
                         dropdown_player.append("option").text(player.player_name).attr("value", player.player_id)}
                 
-                })
-        //When the dropdown menu changes
-        dropdown_player.on("change", function(){
-            //Get the value of the player from the player ID
-            var player_value = this.value
+                    })
+                    
+                //When the dropdown menu changes
+                dropdown_player.on("change", function(){
+                    //Get the value of the player from the player ID
+                    var player_value = this.value
 
-            //Run shotchart, info and stats functions
-            shotchart(player_value);
-            getInfo(player_value);
-            table_stats(player_value);
-            table_volume(player_value)
-            table_info(player_value)
-            table_gamelog(player_value)
-            
-        })
+                    //Run shotchart, info and stats functions
+                    shotchart(player_value);
+                    table_stats(player_value);
+                    table_volume(player_value)
+                    table_info(player_value)
+                    table_gamelog(player_value)
+                
+                })
 
             })
         })
