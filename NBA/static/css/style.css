@@ -13,26 +13,19 @@ body {
     stroke: #000;
   }
   
-  /* .tooltip {
-    position: absolute;
-    width: 200px;
-    height: 28px;
-    pointer-events: none;
-  } */
 
   .tooltip {
-    position: absolute;
-    width: 125px;
-    height: 75px;
-    padding: 2px;
-    padding-top: 8px;
-    font: 12px sans-serif;
-    color: white;
+    padding: 6px;
+    font-size: 12px;
+    line-height: 1;
+    line-height: 1.5em;
+    color: #fff;
     text-align: center;
-    background: #551aaf;
-    border: 0;
-    border-radius: 10px;
+    text-transform: capitalize;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
   }
+  
   
 h1 {
     text-align: center;

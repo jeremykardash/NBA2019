@@ -42,11 +42,11 @@ ySelection = period;
 redraw();
 } 
 
-var svgWidth = 600;
+var svgWidth = 700;
     
 var svgHeight = 600;
 
-var margin = {top: 20, right: 40, bottom: 50, left: 50};
+var margin = {top: 20, right: 40, bottom: 70, left: 90};
         
 var width = svgWidth - margin.left - margin.right;
 
@@ -73,8 +73,8 @@ d3.json(url).then(function(data) {
   });
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+.5]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+.5]);
+  xScale.domain([d3.min(data, xValue)*.1, d3.max(data, xValue)]);
+  yScale.domain([d3.min(data, yValue)*.1, d3.max(data, yValue)]);
 
 
 chartGroup.selectAll("g").remove();
@@ -118,37 +118,16 @@ var xaxis = chartGroup.append("g")
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
      
-
-      
-    // circlegroup.on("mouseover", function(d) {
-    //     console.log(d);
-    //     tooltip.transition()
-    //          .duration(200)
-    //          .style("opacity", .9);
-    //          tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xValue]} <br> ${ySelection}: ${d[yValue]}`)
-    //          .style("left", (d3.event.pageX + 10) + "px")
-    //          .style("top", (d3.event.pageY - 28) + "px");
-    // })
-    //   .on("mouseout", function(d) {
-    //       tooltip.transition()
-    //            .duration(500)
-    //            .style("opacity", 0);
-    //   });
     circlegroup.on("mouseover", function(d) {
-        console.log(d)
         console.log(xSelection)
         console.log(d.target.__data__[xSelection])
       tooltip.transition()
            .duration(100)
            .style("opacity", .9);
-           tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`).style("left", d3.select(this).attr("cx") + "px").style("top", d3.select(this).attr("cy") + "px");
-           //.style("left", d.pageX + "px").style("top", d.pageY + "px")
-
-          //  console.log(d.pageX)
-          //  console.log(d.pageY)
-          // .style("left", `${d.pageX}` + "px")
-          //.style("top", (d3.event.pageY) + "px");
-  })
+           tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
+           .style("left", d3.select(this).attr("cx") + "px")
+           .style("top", d3.select(this).attr("cy") + "px");     
+                })
            .on("mouseout", function(d) {
               tooltip.transition()
                   .duration(500)
@@ -248,8 +227,8 @@ d3.json(url).then(function(data) {
  
 
   // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([d3.min(data, xValue)-.5, d3.max(data, xValue)+.5]);
-  yScale.domain([d3.min(data, yValue)-.5, d3.max(data, yValue)+.5]);
+  xScale.domain([d3.min(data, xValue)*.1, d3.max(data, xValue)]);
+  yScale.domain([d3.min(data, yValue)*.1, d3.max(data, yValue)]);
 
 
   // x-axis
@@ -295,20 +274,15 @@ d3.json(url).then(function(data) {
 
 //     //tooltip on circle group 
       circlegroup.on("mouseover", function(d) {
-          console.log(d)
           console.log(xSelection)
           console.log(d.target.__data__[xSelection])
         tooltip.transition()
              .duration(100)
              .style("opacity", .9);
-             tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`).style("left", d3.select(this).attr("cx") + "px").style("top", d3.select(this).attr("cy") + "px");
-             //.style("left", d.pageX + "px").style("top", d.pageY + "px")
-
-            //  console.log(d.pageX)
-            //  console.log(d.pageY)
-            // .style("left", `${d.pageX}` + "px")
-            //.style("top", (d3.event.pageY) + "px");
-    })
+             tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
+             .style("left", d3.select(this).attr("cx") + "px")
+             .style("top", d3.select(this).attr("cy") + "px");
+                })
              .on("mouseout", function(d) {
                 tooltip.transition()
                     .duration(500)
