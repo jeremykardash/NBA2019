@@ -1,7 +1,7 @@
 .tooltip {
     position: absolute;
     width: 135px;
-    height: 70px;
+    height: 120px;
     padding: 2px;
     padding-top: 8px;
     font: 12px sans-serif;
@@ -13,4 +13,7 @@
     border-radius: 10px;
   };
 
+.well {
+  margin: 10px
+}
 
