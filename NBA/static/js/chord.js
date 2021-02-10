@@ -103,7 +103,7 @@ function Chord(options, matrix) {
         .range(colors);
 
     // 
-    var svg = d3.select("#chord-chart").append("svg")
+    var svg = d3.select(".chord-chart").append("svg")
         .attr("id", "visual")
         .attr("viewBox", viewBoxDimensions)
         .attr("preserveAspectRatio", "xMinYMid")    // add viewBox and preserveAspectRatio
