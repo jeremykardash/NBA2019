@@ -19,15 +19,15 @@
     text-align: center; /* Centered text */
     font-size: 75px; /* Big font size */
     font-weight: bold;
-    position: fixed; /* Fixed position - sit on top of the page */
+    position: block; /*also try inline! */
     top: 0;
     height: 240px;
     width: 100%; /* Full width */
-    transition: 0.2s; /* Add a transition effect (when scrolling - and font size is decreased) */
+    transition: 0.4s; /* Add a transition effect (when scrolling - and font size is decreased) */
   }
 
 #body_text{
-    padding-top: 10px;
+    padding-top: 25px;
     padding-right: 50px;
     padding-left: 50px;
     font-size:20px

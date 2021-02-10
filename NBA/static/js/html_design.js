@@ -8,5 +8,5 @@ function scrollFunction() {
       document.getElementById("header_scroll").style.fontSize = "90px";
       document.getElementById("header_scroll").style.height = "240px";
     }
-    console.log("Hello");
+    console.log("I'm a scrolling!");
   }
