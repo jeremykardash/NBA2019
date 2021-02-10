@@ -53,6 +53,10 @@ players_team = Base.classes.players_teams
 def home():
     return render_template("index.html")
 
+@app.route("/player")
+def playerpage():
+    return render_template("player.html")
+
 # Service Routes
 @app.route("/api/main")
 def main():
@@ -225,10 +229,6 @@ def volume(player_id=None):
         volume.append(data)
 
     return jsonify(volume)
-
-
-    
-
 
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):
