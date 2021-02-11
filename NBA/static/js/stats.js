@@ -1,11 +1,3 @@
-function test(){
-var url ="/api/stats"
-d3.json(url).then(function(response){
-    console.log(response)
-})
-}
-test();
-
 // creating dropdown menu items
 var url ="/api/stats"
 var dropdownone = d3.select("#x-stat")
@@ -223,6 +215,7 @@ var tooltip = d3.select("#bubble").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+
 // for initial page, load data
 d3.json(url).then(function(data) {
 
@@ -232,8 +225,7 @@ d3.json(url).then(function(data) {
     d[xSelection] = +d[xSelection];
 // console.dir (d);
   });
-
- 
+  console.log(data)
 
   // don't want dots overlapping axis, so add in buffer to data domain
   xScale.domain([d3.min(data, xValue)*.1, d3.max(data, xValue)]);
