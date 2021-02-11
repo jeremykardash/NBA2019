@@ -1,3 +1,5 @@
+
+
 body {
     font: 11px sans-serif;
   }
@@ -34,3 +36,53 @@ h1 {
 h2 {
     text-align: left;
     }	
+
+
+  #body{
+      font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+
+.shrink 
+{
+   width:100px;/*change the size here*/
+}
+
+#header_scroll {
+    background-image: url("../../resources/basketball_banner_240px.png");
+    background-color: #000000; /* Grey background */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+    padding-bottom: 30px;
+    color: rgb(255, 255, 255);
+    text-align: center; /* Centered text */
+    font-size: 75px; /* Big font size */
+    font-weight: bold;
+    position: block; /*also try inline! */
+    top: 0;
+    height: 240px;
+    width: 100%; /* Full width */
+    transition: 0.6s; /* Add a transition effect (when scrolling - and font size is decreased) */
+  }
+
+#body_text{
+    padding-top: 25px;
+    padding-right: 50px;
+    padding-left: 50px;
+    font-size:20px
+}
+
+.panel > .panel-title {
+    background-image: none;
+    background-color: rgb(2, 0, 129);
+    color: rgb(255, 255, 255);
+
+}
+
+#barbar{
+  padding-top: 200px;
+  padding-right: 50px;
+  padding-left: 10px;
+  font-size:20px
+}
+
