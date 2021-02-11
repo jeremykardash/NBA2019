@@ -43,11 +43,11 @@ ySelection = stat;
 redraw();
 } 
 
-var svgWidth = 700;
+var svgWidth = 855;
     
 var svgHeight = 600;
 
-var margin = {top: 20, right: 40, bottom: 70, left: 90};
+var margin = {top: 20, right: 50, bottom: 70, left: 100};
         
 var width = svgWidth - margin.left - margin.right;
 
@@ -88,8 +88,8 @@ var xaxis = chartGroup.append("g")
       .call(xAxis);
 // add x-label
     chartGroup.append("text")
-      .attr("x", width-280)
-      .attr("y", height+40)
+      .attr("x", width-380)
+      .attr("y", height+50)
       .attr("font-size","15")
       .attr("font-weight","bold")
       .text(xSelection);
@@ -103,7 +103,7 @@ var xaxis = chartGroup.append("g")
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", height-570)
-      .attr("x", width-775) //controls height 
+      .attr("x", width-975) //controls height 
       .attr("font-size","15")
       .attr("font-weight","bold")
       .attr("dy", ".71em")
@@ -247,8 +247,8 @@ d3.json(url).then(function(data) {
       .call(xAxis);
 //add x label
       chartGroup.append("text")
-      .attr("x", width-280)
-      .attr("y", height+40)
+      .attr("x", width-380)
+      .attr("y", height+50)
       .attr("font-size","15")
       .attr("font-weight","bold")
       .text(xSelection);
@@ -261,7 +261,7 @@ d3.json(url).then(function(data) {
       chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", height-570)
-      .attr("x", width-775)
+      .attr("x", width-975)
       .attr("font-size","15")
       .attr("dy", ".71em")
       .attr("font-weight","bold")
@@ -286,7 +286,7 @@ d3.json(url).then(function(data) {
         tooltip.transition()
              .duration(100)
              .style("opacity", .9);
-             tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
+             tooltip.html (`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
              .style("left", d3.select(this).attr("cx") + "px")
              .style("top", d3.select(this).attr("cy") + "px");
                 })

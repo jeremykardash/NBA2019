@@ -15,7 +15,7 @@ body {
   
 
   .tooltip {
-    padding: 6px;
+    padding: 4px;
     font-size: 12px;
     line-height: 1;
     line-height: 1.5em;
@@ -23,7 +23,7 @@ body {
     text-align: center;
     text-transform: capitalize;
     background: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
+    border-radius: 12px;
   }
   
   
