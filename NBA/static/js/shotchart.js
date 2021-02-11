@@ -14,6 +14,63 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
+//Function for player info
+function table_info(player_id) {
+
+    //Select table
+    var tbody = d3.selectAll('tbody')
+    var info_body = d3.select(".info-body")
+
+    //Clear
+    info_body.html('')
+
+    //Access API
+    var url = `/api/playerinfo/${player_id}`
+    d3.json(url).then(data=>{
+
+        //Iteratate for the infor
+        data.forEach(function(info){
+
+            //Append one row of data
+            var row = info_body.append('tr');
+            Object.entries(info).forEach(([key, value]) => {
+
+                //Create a cell for every attribute
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+};
+
+//Function for player stats
+function table_stats(player_id) {
+
+    //find table and clear output
+    var tbody = d3.selectAll('tbody')
+    var stats_body = d3.select("#stats-body")
+    stats_body.html('')
+
+    //Access API with player_id
+    var url = `/api/seasonstats/${player_id}`
+    d3.json(url).then(data=>{
+        
+        //Find oen row of stats
+        data.forEach(function(stats){
+            var row = stats_body.append('tr');
+
+            //For each value add a cell and input the value as text
+            Object.entries(stats).forEach(([key, value]) => {
+                var cell = row.append("td");
+                cell.text(value);
+        })
+        
+        })
+
+    })
+};
 
 //Function for arcs in the court
 function appendArcPath(base, radius, startAngle, endAngle) {
@@ -29,7 +86,7 @@ function appendArcPath(base, radius, startAngle, endAngle) {
 
     return base.datum(d3.range(points))
         .attr("d", line);
-}
+};
 
 
 //Function to remove existing shotchart
@@ -227,7 +284,7 @@ function shotchart(player_id) {
               toolTip.hide(response);
             });
         });
-        };  
+};  
 
 
 //Function for Volume and FG% table    
@@ -264,39 +321,8 @@ function table_volume(player_id) {
         })
 
     })
-}
+};
 
-
-//Function for player info
-function table_info(player_id) {
-
-    //Select table
-    var tbody = d3.selectAll('tbody')
-    var info_body = d3.select(".info-body")
-
-    //Clear
-    info_body.html('')
-
-    //Access API
-    var url = `/api/playerinfo/${player_id}`
-    d3.json(url).then(data=>{
-
-        //Iteratate for the infor
-        data.forEach(function(info){
-
-            //Append one row of data
-            var row = info_body.append('tr');
-            Object.entries(info).forEach(([key, value]) => {
-
-                //Create a cell for every attribute
-                var cell = row.append("td");
-                cell.text(value);
-        })
-        
-        })
-
-    })
-}
 
 //Function for game log information
 function table_gamelog(player_id) {
@@ -323,34 +349,8 @@ function table_gamelog(player_id) {
         })
 
     })
-}
+};
 
-//Function for player stats
-function table_stats(player_id) {
-
-    //find table and clear output
-    var tbody = d3.selectAll('tbody')
-    var stats_body = d3.select("#stats-body")
-    stats_body.html('')
-
-    //Access API with player_id
-    var url = `/api/seasonstats/${player_id}`
-    d3.json(url).then(data=>{
-        
-        //Find oen row of stats
-        data.forEach(function(stats){
-            var row = stats_body.append('tr');
-
-            //For each value add a cell and input the value as text
-            Object.entries(stats).forEach(([key, value]) => {
-                var cell = row.append("td");
-                cell.text(value);
-        })
-        
-        })
-
-    })
-}
 
 //Function to initialize the page
 function init() {
