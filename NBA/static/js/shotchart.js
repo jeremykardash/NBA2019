@@ -273,7 +273,7 @@ function shotchart(player_id) {
             });
       
           //Create tooltip in the chart
-          chartGroup.call(toolTip);
+          circlesGroup.call(toolTip);
       
           //Create event listeners to display and hide the tooltip
           circlesGroup.on("mouseover", function(response) {
