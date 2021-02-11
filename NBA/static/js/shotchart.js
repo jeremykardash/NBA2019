@@ -85,7 +85,7 @@ function shotchart(player_id) {
         var CenterOuter = chartGroup.append('path')
         var CenterInner = chartGroup.append('path')
 
-
+        //Create scaled for courts (these are 1/10th the size of the scale of the circles for simplicity)
         var court_xScale = d3.scaleLinear()
             .domain([-25, 25])
             .range([0, width])
@@ -93,6 +93,7 @@ function shotchart(player_id) {
             .domain([-4,43])
             .range([margin.top, height])
         
+        //Add components to the court
         Basket
             .attr('cx', court_xScale(0))
             .attr('cy', court_yScale(-0.75))
@@ -191,7 +192,7 @@ function shotchart(player_id) {
             .attr("transform", "translate(" + court_xScale(0) + ", " +court_yScale(43) +")");
             
         
-        //Create Circles
+        //Append Circles
         var circlesGroup = chartGroup.selectAll("circle")
             .data(response)
             .enter()
@@ -229,18 +230,34 @@ function shotchart(player_id) {
         };  
 
 
+//Function for Volume and FG% table    
 function table_volume(player_id) {
+
+    //Sleect the specific table
     var tbody = d3.selectAll('tbody')
     var volume_body = d3.select("#volume-body")
-    volume_body.html('')
-    var url = `api/volume/${player_id}`
-    d3.json(url).then(data=>{
-        
 
+    //Clear
+    volume_body.html('')
+
+    //Access API through player_id
+    var url = `api/volume/${player_id}`
+
+    d3.json(url).then(data=>{
+
+        //Iterate through the data for each spot on the court and append as a row
         data.forEach(function(location){
+
+            //Row for each location
             var row = volume_body.append('tr');
+
+            //Use object.entries and iterate through each value to input
             Object.entries(location).forEach(([key, value]) => {
+
+                //Cell for each value
                 var cell = row.append("td");
+
+                //Input value
                 cell.text(value);
         })
         
@@ -249,17 +266,29 @@ function table_volume(player_id) {
     })
 }
 
+
+//Function for player info
 function table_info(player_id) {
+
+    //Select table
     var tbody = d3.selectAll('tbody')
     var info_body = d3.select(".info-body")
+
+    //Clear
     info_body.html('')
+
+    //Access API
     var url = `/api/playerinfo/${player_id}`
     d3.json(url).then(data=>{
-        
 
+        //Iteratate for the infor
         data.forEach(function(info){
+
+            //Append one row of data
             var row = info_body.append('tr');
             Object.entries(info).forEach(([key, value]) => {
+
+                //Create a cell for every attribute
                 var cell = row.append("td");
                 cell.text(value);
         })
@@ -269,16 +298,23 @@ function table_info(player_id) {
     })
 }
 
+//Function for game log information
 function table_gamelog(player_id) {
+
+    //Append to gamelog table and clear current output
     var tbody = d3.selectAll('tbody')
     var game_body = d3.select("#gamelog-body")
     game_body.html('')
+
+    //Access API through player_id input
     var url = `/api/gamelog/${player_id}`
     d3.json(url).then(data=>{
         
-
+        //For each game add a row
         data.forEach(function(game){
             var row = game_body.append('tr');
+
+            //For each value add a cell and input the value as text
             Object.entries(game).forEach(([key, value]) => {
                 var cell = row.append("td");
                 cell.text(value);
@@ -289,17 +325,24 @@ function table_gamelog(player_id) {
     })
 }
 
+//Function for player stats
 function table_stats(player_id) {
+
+    //find table and clear output
     var tbody = d3.selectAll('tbody')
     var stats_body = d3.select("#stats-body")
     stats_body.html('')
+
+    //Access API with player_id
     var url = `/api/seasonstats/${player_id}`
     d3.json(url).then(data=>{
         
-
-        data.forEach(function(game){
+        //Find oen row of stats
+        data.forEach(function(stats){
             var row = stats_body.append('tr');
-            Object.entries(game).forEach(([key, value]) => {
+
+            //For each value add a cell and input the value as text
+            Object.entries(stats).forEach(([key, value]) => {
                 var cell = row.append("td");
                 cell.text(value);
         })
@@ -311,20 +354,23 @@ function table_stats(player_id) {
 
 //Function to initialize the page
 function init() {
-    shotchart(2544);
+
+    //Start the page up on 2544 - Lebron James
+    table_info(2544);
     table_stats(2544);
-    table_volume(2544)
-    table_info(2544)
-    table_gamelog(2544)
+    shotchart(2544);
+    table_volume(2544);
+    table_gamelog(2544);
+
     // select dropdown menu item
     var dropdown_team = d3.select("#teamID");
     var dropdown_player = d3.select("#playerID");
 
-    // read the data 
+    // read the data  through API
     var teams_url = "api/teams"
     d3.json(teams_url).then((response)=> {
 
-        //Append the id data to the dropdwown menu
+        //Append each team to drop down
         response.forEach(function(team) {
              dropdown_team.append("option").text(team.nickname).attr("value", team.id);
             });
@@ -333,7 +379,8 @@ function init() {
         dropdown_team.on("change", function(){
 
             //Remove all existing dropdown options
-            dropdown_player.selectAll("option").remove()
+            dropdown_player.selectAll("option").remove();
+
             // get value of selection of change
             var input_value = this.value;
             
@@ -345,22 +392,26 @@ function init() {
 
                 //For each player check if they were on that team, and append the player to the dropdown
                 response.forEach(function(player){
+
+                        //If a player has the team ID in their data, then
                         if (player.team_id == input_value) {
+                        //Append the player name and give it the value of player_id    
                         dropdown_player.append("option").text(player.player_name).attr("value", player.player_id)}
                 
                     })
                     
                 //When the dropdown menu changes
                 dropdown_player.on("change", function(){
-                    //Get the value of the player from the player ID
-                    var player_value = this.value
 
-                    //Run shotchart, info and stats functions
-                    shotchart(player_value);
+                    //Get the value of the player from the player ID
+                    var player_value = this.value;
+
+                    //Run functions on input value using the value as player_id
+                    table_info(player_value);
                     table_stats(player_value);
-                    table_volume(player_value)
-                    table_info(player_value)
-                    table_gamelog(player_value)
+                    shotchart(player_value);
+                    table_volume(player_value);
+                    table_gamelog(player_value);
                 
                 })
 
@@ -370,5 +421,6 @@ function init() {
     });
 };
 
+//Call the initialization
 init();
 
