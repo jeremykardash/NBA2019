@@ -167,7 +167,7 @@ var xaxis = chartGroup.append("g")
 
   // draw legend text
   legend.append("text")
-      .attr("x", width - 11)
+      .attr("x", width - 2)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
