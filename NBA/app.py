@@ -25,6 +25,7 @@ import pandas as pd
 
 #pylint: disable=unused-variable
 
+
 # Flask Setup
 #################################################
 app = Flask(__name__)
@@ -268,20 +269,48 @@ def shotcharts(player_id=None):
 @app.route("/api/stats")
 def bubbleroute():
     session = Session(engine)
-    sel = [stats.player_id, stats.player_name,salaries.salary, stats.pos,stats.TwoP_m, stats.ThreeP_m]
+
+    sel = [stats.player_id, stats.player_name, salaries.salary, stats.pos,
+    stats.TwoP_m, stats.ThreeP_m, stats.mp, stats.fg, stats.fga, stats.fg_percent,	
+    stats.ThreeP_a,	stats.ThreeP_percent, stats.TwoP_a,	stats.TwoP_percent,	stats.efg_percent,	
+    stats.ft, stats.fta, stats.ft_percent, stats.pts, stats.orb, stats.drb, stats.trb, stats.ast,
+     stats.stl, stats.blk, stats.tov]
+
     results = session.query(*sel).filter(salaries.player_id == stats.player_id).all()
+   
     session.close()
+
     all_stats = []
-    for player_id, player_name, salary, pos, TwoP_m, ThreeP_m in results:
+    for result in results:
         stats_dict ={}
-        stats_dict["Player_id"] = player_id
-        stats_dict["Player_name"] = player_name
-        stats_dict["Salary"] = salary
-        stats_dict["Position"] = pos
-        stats_dict["2pm"] = TwoP_m
-        stats_dict["3pm"] = ThreeP_m
+        stats_dict["Player_id"] = result[0]
+        stats_dict["Player_name"] = result[1]
+        stats_dict["Salary"] = result[2]
+        stats_dict["Position"] = result[3]
+        stats_dict["2PT Made"] = result[4]
+        stats_dict["3PT Made"] = result[5]
+        stats_dict["Minutes Played"] = result[6]
+        stats_dict["Field-Goal Made"] = result[7]
+        stats_dict["Field-Goal Attempts"] = result[8]
+        stats_dict["Field-Goal %"] = result[9]
+        stats_dict["3PT Attempts"] = result[10]
+        stats_dict["3PT %"] = result[11]
+        stats_dict["2PT Attempts"] = result[12]
+        stats_dict["2PT %"] = result[13]
+        stats_dict["Effective Field-Goal %"] = result[14]
+        stats_dict["FT Made"] = result[15]
+        stats_dict["FT Attemps"] = result[16]
+        stats_dict["FT %"] = result[17]
+        stats_dict["Points"] = result[18]
+        stats_dict["Offensive Rebounds"] = result[19]
+        stats_dict["Defensive Rebounds"] = result[20]
+        stats_dict["Total Rebounds"] = result[21]
+        stats_dict["Assists"] = result[22]
+        stats_dict["Steals"] = result[23]
+        stats_dict["Blocks"] = result[24]
+        stats_dict["Turnovers"] = result[25]
         all_stats.append(stats_dict)
-    
+   
     return jsonify(all_stats)
 
 if __name__ == "__main__":
