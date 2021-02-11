@@ -160,14 +160,14 @@ var xaxis = chartGroup.append("g")
 
   // draw legend colored rectangles
   legend.append("rect")
-      .attr("x", width - 18)
+      .attr("x", width - 5)
       .attr("width", 18)
       .attr("height", 18)
       .style("fill", color);
 
   // draw legend text
   legend.append("text")
-      .attr("x", width - 24)
+      .attr("x", width - 11)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
@@ -306,14 +306,14 @@ d3.json(url).then(function(data) {
 
   // draw legend colored rectangles
   legend.append("rect")
-      .attr("x", width -18)
+      .attr("x", width -5)
       .attr("width", 18)
       .attr("height", 18)
       .style("fill", color);
 
   // draw legend text
   legend.append("text")
-      .attr("x", width -24)
+      .attr("x", width -11)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
