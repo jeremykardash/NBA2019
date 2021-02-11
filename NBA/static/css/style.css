@@ -23,7 +23,7 @@
     top: 0;
     height: 240px;
     width: 100%; /* Full width */
-    transition: 0.4s; /* Add a transition effect (when scrolling - and font size is decreased) */
+    transition: 0.6s; /* Add a transition effect (when scrolling - and font size is decreased) */
   }
 
 #body_text{
