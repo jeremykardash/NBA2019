@@ -15,8 +15,22 @@ body {
     stroke: #000;
   }
   
+.tooltip-shotchart {
+    position: absolute;
+    width: 135px;
+    height: 120px;
+    padding: 2px;
+    padding-top: 8px;
+    font: 12px sans-serif;
+    color:black;
+    text-align: center;
+    background:whitesmoke;
+    border-color: black;
+    border: 0;
+    border-radius: 10px;
+  };
 
-  .tooltip {
+  .tooltip-bubble {
     padding: 4px;
     font-size: 12px;
     line-height: 1;
@@ -85,4 +99,5 @@ h2 {
   padding-left: 10px;
   font-size:20px
 }
+
 
