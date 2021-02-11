@@ -24,20 +24,21 @@ d3.json(url).then(function(response){
 
 })
 
-//select dropdown items and set as axes 
+//select dropdown items and set as initial axes 
 var xSelection ="Points";
 var ySelection ="Assists";
 
-function reportX(period) {
-  if (period=="") return; // please select - possibly you want something else here
-xSelection = period;
+//function to make xaxis interactive with dropdown menu 
+function reportX(stat) {
+  if (stat=="") return; // please select - possibly you want something else here
+xSelection = stat;
 
 redraw();
 } 
-
-function reportY(period) {
-  if (period=="") return; // please select - possibly you want something else here
-ySelection = period;
+//function to make yaxis interactive with dropdown menu 
+function reportY(stat) {
+  if (stat=="") return; // please select - possibly you want something else here
+ySelection = stat;
 
 redraw();
 } 
@@ -108,7 +109,7 @@ var xaxis = chartGroup.append("g")
       .attr("dy", ".71em")
       .text(ySelection);
 
-  // draw dots
+  // draw circles 
   var circlegroup = chartGroup.selectAll(".dot")
       .data(data)
       .enter().append("circle")
@@ -117,7 +118,8 @@ var xaxis = chartGroup.append("g")
       .attr("cx", xMap)
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
-     
+    
+      //tooltip for circle group when mouseover
     circlegroup.on("mouseover", function(d) {
         console.log(xSelection)
         console.log(d.target.__data__[xSelection])
@@ -134,6 +136,7 @@ var xaxis = chartGroup.append("g")
                   .style("opacity", 0);
               });
 
+//transition for circles when select new axes
   chartGroup.selectAll("circle")
                        .data(data)
                        .transition()
@@ -142,10 +145,10 @@ var xaxis = chartGroup.append("g")
                         .attr("cy", yMap);
 
 
-      chartGroup.selectAll(".dot")
-      .data(data)
-             .exit()
-             .remove()
+    //   chartGroup.selectAll(".dot")
+    //   .data(data)
+    //          .exit()
+    //          .remove()
 
   // draw legend
   var legend = chartGroup.selectAll(".legend")
@@ -185,22 +188,30 @@ d3.selectAll("#Position").remove();
 };
 
 // setup x 
+//return the value of xselection
 var xValue = function(d) { return d[xSelection];}; // data -> value
+//setup xscale
 var xScale = d3.scaleLinear().range([0, width]);// value -> display
+//map the xvalue on graph
 var xMap = function(d) { return xScale(xValue(d));}; // data -> display
+//create xaxis
 var xAxis = d3.axisBottom(xScale);
 
 // setup y
+//return the value of yselection
 var yValue = function(d) { return d[ySelection];}; // data -> value
+//setup yscale
 var yScale = d3.scaleLinear().range([height, 0]); // value -> display
+// map the yvalue on the graph 
 var yMap = function(d) { return yScale(yValue(d));}; // data -> display
+// create yaxis 
 var yAxis = d3.axisLeft(yScale);
-
-// setup fill color
+// fill color of circles by position
 var cValue = function(d) { return d.Position;},
 color = d3.scaleOrdinal(d3.schemeCategory10);
 
-// add the graph canvas to the body of the webpage
+ // Create an SVG wrapper, append an SVG group that will hold our chart,
+ // and shift the latter by left and top margins.
 var svg = d3.select("#bubble").append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
@@ -212,9 +223,7 @@ var tooltip = d3.select("#bubble").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-
-
-// load data
+// for initial page, load data
 d3.json(url).then(function(data) {
 
   // change string into number format
@@ -236,7 +245,7 @@ d3.json(url).then(function(data) {
       .attr("class", "x axis")
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
-      
+//add x label
       chartGroup.append("text")
       .attr("x", width-280)
       .attr("y", height+40)
@@ -248,7 +257,7 @@ d3.json(url).then(function(data) {
     var yaxis =chartGroup.append("g")
       .attr("class", "y axis")
       .call(yAxis);
-
+  // add y label
       chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", height-570)
@@ -259,7 +268,7 @@ d3.json(url).then(function(data) {
       .text(ySelection);
 
 
-  // draw dots
+  // draw circles
   var circlegroup = chartGroup.selectAll(".dot")
       .data(data)
       .enter()
@@ -270,9 +279,7 @@ d3.json(url).then(function(data) {
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
 
-   
-
-//     //tooltip on circle group 
+    //tooltip on circle group 
       circlegroup.on("mouseover", function(d) {
           console.log(xSelection)
           console.log(d.target.__data__[xSelection])
@@ -289,8 +296,6 @@ d3.json(url).then(function(data) {
                     .style("opacity", 0);
                 });
         
-   
-
   // draw legend
   var legend = chartGroup.selectAll(".legend")
       .data(color.domain())
