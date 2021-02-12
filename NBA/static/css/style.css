@@ -28,9 +28,9 @@ body {
     border-color: black;
     border: 0;
     border-radius: 10px;
-  };
+  }
 
-  .tooltip-bubble {
+.tooltip-bubble {
     padding: 4px;
     font-size: 12px;
     line-height: 1;
