@@ -256,7 +256,7 @@ function shotchart(player_id) {
             .append("circle")
             .attr("cx", (d => xLinearScale(d.x*(-1))))
             .attr("cy", (d => height - yLinearScale(d.y)))
-            .attr("r", "3")
+            .attr("r", "5")
             .attr("stroke", "grey")
             .attr("opacity", "1")
             .attr("fill", (d => d.class))
