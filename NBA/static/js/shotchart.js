@@ -263,7 +263,7 @@ function shotchart(player_id) {
         
         //Add tooltip on circles
         var toolTip = d3.tip()
-            .attr("class", "tooltip")
+            .attr("class", "tooltip-shotchart")
             .offset([80, -60])
             .html(function(d) {
               return (`<strong>${d.away} @ ${d.home} Q${d.quarter} ${d.minutes}:${d.seconds}</strong><br>
