@@ -212,7 +212,7 @@ var chartGroup= svg.append("g")
 
 // add the tooltip area to the webpage
 var tooltip = d3.select("#bubble").append("div")
-    .attr("class", "tooltip")
+    .attr("class", "tooltip-bubble")
     .style("opacity", 0);
 
 
