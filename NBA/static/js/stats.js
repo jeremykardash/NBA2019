@@ -35,7 +35,7 @@ ySelection = stat;
 redraw();
 } 
 
-var svgWidth = 855;
+var svgWidth = 990;
     
 var svgHeight = 600;
 
@@ -112,22 +112,37 @@ var xaxis = chartGroup.append("g")
       .style("fill", function(d) { return color(cValue(d));});
     
       //tooltip for circle group when mouseover
-    circlegroup.on("mouseover", function(d) {
-        console.log(xSelection)
-        console.log(d.target.__data__[xSelection])
-      tooltip.transition()
-           .duration(100)
-           .style("opacity", .9);
-           tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
-           .style("left", d3.select(this).attr("cx") + "px")
-           .style("top", d3.select(this).attr("cy") + "px");     
-                })
-           .on("mouseout", function(d) {
-              tooltip.transition()
-                  .duration(500)
-                  .style("opacity", 0);
-              });
+    // circlegroup.on("mouseover", function(d) {
+    //     console.log(xSelection)
+    //     console.log(d.target.__data__[xSelection])
+    //   tooltip.transition()
+    //        .duration(100)
+    //        .style("opacity", .9);
+    //        tooltip.html(`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`)
+    //        .style("left", d3.select(this).attr("cx") + "px")
+    //        .style("top", d3.select(this).attr("cy") + "px");     
+    //             })
+    //        .on("mouseout", function(d) {
+    //           tooltip.transition()
+    //               .duration(500)
+    //               .style("opacity", 0);
+    //           });
+                var toolTip = d3.tip()
+                      .attr("class", "tooltip-bubble")
+                      .html(function(d) {
+                          return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
+                  });
 
+                  // Create Text Tooltip in the Chart
+                  circlegroup.call(toolTip);
+                  // Create Event Listeners to Display and Hide the Text Tooltip
+                  circlegroup.on("mouseover", function(data) {
+                  toolTip.show(data, this);
+                  })
+                  .on("mouseout", function(data) {
+                      toolTip.hide(data);
+                  });
+              // (`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
 //transition for circles when select new axes
   chartGroup.selectAll("circle")
                        .data(data)
@@ -272,21 +287,41 @@ d3.json(url).then(function(data) {
       .style("fill", function(d) { return color(cValue(d));});
 
     //tooltip on circle group 
-      circlegroup.on("mouseover", function(d) {
-          console.log(xSelection)
-          console.log(d.target.__data__[xSelection])
-        tooltip.transition()
-             .duration(100)
-             .style("opacity", .9);
-             tooltip.html (`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
-             .style("left", d3.select(this).attr("cx") + "px")
-             .style("top", d3.select(this).attr("cy") + "px");
-                })
-             .on("mouseout", function(d) {
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-                });
+      // circlegroup.on("mouseover", function(d) {
+      //   console.log(d)
+      //     console.log(xSelection)
+      //     // console.log(d.target.__data__[xSelection])
+      //     console.log(d.Player_name)
+      //   tooltip.transition()
+      //        .duration(100)
+      //        .style("opacity", .9);
+      //        tooltip.html (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`)
+      //           .style("left", (d3.event.pageX + 10) + "px")
+      //           .style("top", (d3.event.pageY - 28) + "px");
+      //        //  .style("left", d3.select(this).attr("cx") + "px")
+      //       //  .style("top", d3.select(this).attr("cy") + "px");
+      //           })
+      //        .on("mouseout", function(d) {
+      //           tooltip.transition()
+      //               .duration(500)
+      //               .style("opacity", 0);
+      //           });
+
+                var toolTip = d3.tip()
+                .attr("class", "tooltip-bubble")
+                .html(function(d) {
+                     return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
+            });
+        
+            // Create Text Tooltip in the Chart
+            circlegroup.call(toolTip);
+            // Create Event Listeners to Display and Hide the Text Tooltip
+            circlegroup.on("mouseover", function(data) {
+            toolTip.show(data, this);
+            })
+            .on("mouseout", function(data) {
+                toolTip.hide(data);
+            });
         
   // draw legend
   var legend = chartGroup.selectAll(".legend")
