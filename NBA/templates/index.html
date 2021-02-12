@@ -6,25 +6,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NBA</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link rel="icon" type="image/png" href="../icon/basketball.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v3.min.js"></script>
+
 </head>
 
 <body>
+    <div id='header_scroll'>
+            NBA 2018-19
+    </div>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="/player">Players</a>
+          </div>
+        </div>
+      </nav>
+    <div class ="container-fluid" id ='js-code'>
+        <div class ="row">
+          <div class = "col-sm-4">
+            <div class ="card card-body bg-light">
+              <div id ="body_text">
+                <p>The 2018–19 NBA season was the 73rd season of the <a href="https://www.nba.com">National Basketball Association</a> NBA.
+                    The regular season began on October 16, 2018, and ended on April 10, 2019</p>
+                <p>The 2019 <a href="https://en.wikipedia.org/wiki/2019_NBA_All-Star_Game">NBA All-Star Game</a> was played on February 17, 2019, at the Spectrum Center in Charlotte, North Carolina.
+                     The playoffs began on April 13, 2019 and ended on June 13 with the <a href="https://www.nba.com/raptors/">Toronto Raptors</a> defeating the defending
+                      NBA champion Golden State Warriors in the 2019 NBA Finals, becoming NBA champions for the first time in franchise history. 
+                      This season would mark the first time since 2010 in which LeBron James did not make a Finals appearance. 
+                      This would also be the final season for Dirk Nowitzki, Tony Parker and Dwyane Wade.
+                    </p>
+                <p>Add in snippets of the project proposal!<br>
+                    <a href="https://getbootstrap.com/docs/4.0/layout/grid/">Bootstrap Grid system</a><br>
+                    <a href="https://www.w3schools.com/bootstrap/bootstrap_panels.asp"> Bootstrap Panel system</a><br>
+                    <a href="https://www.w3schools.com/jsref/event_onscroll.asp">JS Banner Scroll Function</a><br>
+                    <a href= "http://bl.ocks.org/nbremer/94db779237655907b907"> D3 CHord Diagram with mouse over</a><br>
+                    <a href=https://towardsdatascience.com/interactive-basketball-data-visualizations-with-plotly-8c6916aaa59e>
+                    Plotly Shot Chart</a><br>
+        
+                    Let's put in some stuff!!!
+                </p>
+                
+            </div>
+                    
+            </div>
 
-    <div id='description'></div>
-    <div id='bubble'></div>
-    <div id='chord-chart'></div>
-    <div id='shot-chart'></div>
-    
+        </div>          
+            <div class = "col-sm-8">
+                <div class ="card card-body bg-light" id="chord-holder">
+                    <div id = "chord-chart">
+                    </div>
+                </div>
+
+            </div>
+                
+                    
+        </div>
+        <div class ="row">
+                       
+            <div class = "col-sm-12">
+                <div class ="card card-body bg-light" id="bubble">
+                    <p>
+            
+                        <i>Select X-axis</i>
+                        <select id="x-stat" onchange="reportX(this.value)"></select>
+                        <!-- <br> -->
+                        <b>vs.</b>
+                        <!-- <br> -->
+                        <i>Select Y-axis</i>
+                        <select id="y-stat" onchange="reportY(this.value)"></select>
+                        <br>
+                        <b>Stats per game</b>
+                       
+                    </p>
+                    <!-- <div id="bubble"></div> -->
+                </div>
+
+        
+            </div>
+                
+                    
+        </div>
+              
+
+    </div>
+
+   
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
-
+    <script src="../static/js/html_design.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../static/js/team_colours.js"></script>
     <script src="../static/js/chord.js"></script>
-    
-
+    <!-- <script src="{{ url_for('static', filename='js/chord.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+ 
 </body>
 
 </html>
+

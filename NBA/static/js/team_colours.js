@@ -179,3 +179,5 @@ team_colours = [
       "hexcode2": "#FFC72",
       "hexcode3": ""
     }]
+
+    console.log("Team Colours")

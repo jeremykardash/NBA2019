@@ -108,7 +108,7 @@ function Chord(options, matrix) {
         .attr("viewBox", viewBoxDimensions)
         .attr("preserveAspectRatio", "xMinYMid")    // add viewBox and preserveAspectRatio
         .attr("width", width)
-        .attr("height", height)
+        .attr("height", width/aspect)
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -185,7 +185,7 @@ function Chord(options, matrix) {
     
     // window resize helper
     window.onresize = function() {
-        var targetWidth = (window.innerWidth < width)? window.innerWidth : width;
+        var targetWidth = d3.select("#chord-holder").node().width;
         
         var svg = d3.select("#visual")
             .attr("width", targetWidth)
@@ -201,3 +201,5 @@ window.onload = function() {
 }
 
 d3.select(self.frameElement).style("height", "600px");
+console.log("Chord Chart")
+
