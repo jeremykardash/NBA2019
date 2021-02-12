@@ -1,11 +1,3 @@
 {
-<<<<<<< Updated upstream
-<<<<<<< stats
     "python.pythonPath": "/usr/local/anaconda3/bin/python"
-=======
-    "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe"
->>>>>>> html
-=======
-    "python.pythonPath": "/Users/mattdavies/opt/anaconda3/bin/python"
->>>>>>> Stashed changes
 }
