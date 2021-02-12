@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session
 
 ###NPA API
 from nbapy import game, shot_chart, player
+
 from nba_api.stats.static import players
 import nba_api.stats.endpoints
 from nba_api.stats.static import teams
