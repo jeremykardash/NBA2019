@@ -23,14 +23,14 @@ var ySelection ="Assists";
 
 //function to make xaxis interactive with dropdown menu 
 function reportX(stat) {
-  if (stat=="") return; // please select - possibly you want something else here
+  if (stat=="") return; 
 xSelection = stat;
 
 redraw();
 } 
 //function to make yaxis interactive with dropdown menu 
 function reportY(stat) {
-  if (stat=="") return; // please select - possibly you want something else here
+  if (stat=="") return; 
 ySelection = stat;
 
 redraw();
@@ -112,7 +112,7 @@ var xaxis = chartGroup.append("g")
         return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
         });
 
-    // Create Text Tooltip in the Chart
+    // Create Tooltip in the Chart
     circlegroup.call(toolTip);
   // Create Event Listeners to Display and Hide the Text Tooltip
     circlegroup.on("mouseover", function(data) {
@@ -260,9 +260,9 @@ d3.json(url).then(function(data) {
              return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
         });
         
-            // Create Text Tooltip in the Chart
+    // Create Tooltip in the Chart
       circlegroup.call(toolTip);
-            // Create Event Listeners to Display and Hide the Text Tooltip
+      // Create Event Listeners to Display and Hide the Text Tooltip
       circlegroup.on("mouseover", function(data) {
         toolTip.show(data, this);
       })
@@ -306,8 +306,6 @@ d3.selectAll("#Player_name").remove();
 d3.selectAll("#Player_id").remove();
 d3.selectAll("#Position").remove(); 
 });
-
-
 
 
 
