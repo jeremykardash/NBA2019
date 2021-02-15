@@ -18,7 +18,7 @@ body {
 .tooltip-shotchart {
     position: absolute;
     width: 135px;
-    height: 120px;
+    height: 80px;
     padding: 2px;
     padding-top: 8px;
     font: 12px sans-serif;

@@ -239,26 +239,29 @@ def volume(player_id=None):
 
 @app.route("/api/shotchart2/<id>")
 def shotcharts2(id=None):
-    df = shotchartdetail.ShotChartDetail(player_id=id, team_id=0, season_nullable='2018-19')
-    NewDF=df.get_data_frames()[0]
+    data = shotchartdetail.ShotChartDetail(player_id=id, team_id=0, season_nullable='2018-19')
+    NewDF= data.get_data_frames()
+    df = NewDF[0]
 
     allshots = []
-    for index, row in NewDF.iterrows():
+    for index, row in df.iterrows():
         shot = {}
-        shot["GAME_DATE"] = row["GAME_DATE"]
+        shot["year"] = row["GAME_DATE"][0:4]
+        shot["day"] = row["GAME_DATE"][4:6]
+        shot["month"] = row["GAME_DATE"][6:8]
         shot["GAME_ID"] = row["GAME_ID"]
         shot["TEAM_NAME"] = row["TEAM_NAME"]
         shot["PLAYER_NAME"] = row["PLAYER_NAME"]
-        shot["PERIOD"] = row["PERIOD"]
-        shot["MINUTES_REMAINING"] = row["MINUTES_REMAINING"]
-        shot["SECONDS_REMAINING"] = row["SECONDS_REMAINING"]
-        shot["ACTION_TYPE"] = row["ACTION_TYPE"]
-        shot["SHOT_TYPE"] = row["SHOT_TYPE"]
-        shot["SHOT_DISTANCE"] = row["SHOT_DISTANCE"]
-        shot["LOC_X"] = row["LOC_X"]
-        shot["LOC_Y"] = row["LOC_Y"]
-        shot["HTM"] = row["HTM"]
-        shot["VTM"] = row["VTM"] 
+        shot["quarter"] = row["PERIOD"]
+        shot["minutes"] = row["MINUTES_REMAINING"]
+        shot["seconds"] = row["SECONDS_REMAINING"]
+        shot["action_type"] = row["ACTION_TYPE"]
+        shot["shot_type"] = row["SHOT_TYPE"]
+        shot["shot_distance"] = row["SHOT_DISTANCE"]
+        shot["x"] = row["LOC_X"]
+        shot["y"] = row["LOC_Y"]
+        shot["home"] = row["HTM"]
+        shot["away"] = row["VTM"] 
         allshots.append(shot)
 
     return jsonify(allshots)

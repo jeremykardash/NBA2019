@@ -258,6 +258,7 @@ function shotchart(player_id) {
             .attr("cy", (d => height - yLinearScale(d.y)))
             .attr("r", "5")
             .attr("stroke", "grey")
+            .attr("fill", "orange")
             .attr("opacity", "1")
             //.attr("fill", (d => d.class))
         
