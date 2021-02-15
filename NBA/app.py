@@ -15,16 +15,20 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
-# ###NPA API
-# from nbapy import game, shot_chart, player
-# from nba_api.stats.static import players
-# import nba_api.stats.endpoints
-# from nba_api.stats.static import teams
-# from nba_api.stats.endpoints import commonplayerinfo
-# import pandas as pd
+
+###NPA API
+from nbapy import game, shot_chart, player
+
+from nba_api.stats.static import players
+import nba_api.stats.endpoints
+from nba_api.stats.static import teams
+from nba_api.stats.endpoints import commonplayerinfo
+import pandas as pd
+from nba_api.stats.endpoints import shotchartdetail
+from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
+
 
 #pylint: disable=unused-variable
-
 
 # Flask Setup
 #################################################
@@ -232,6 +236,32 @@ def volume(player_id=None):
         volume.append(data)
 
     return jsonify(volume)
+
+@app.route("/api/shotchart2/<id>")
+def shotcharts2(id=None):
+    df = shotchartdetail.ShotChartDetail(player_id=id, team_id=0, season_nullable='2018-19')
+    NewDF=df.get_data_frames()[0]
+
+    allshots = []
+    for index, row in NewDF.iterrows():
+        shot = {}
+        shot["GAME_DATE"] = row["GAME_DATE"]
+        shot["GAME_ID"] = row["GAME_ID"]
+        shot["TEAM_NAME"] = row["TEAM_NAME"]
+        shot["PLAYER_NAME"] = row["PLAYER_NAME"]
+        shot["PERIOD"] = row["PERIOD"]
+        shot["MINUTES_REMAINING"] = row["MINUTES_REMAINING"]
+        shot["SECONDS_REMAINING"] = row["SECONDS_REMAINING"]
+        shot["ACTION_TYPE"] = row["ACTION_TYPE"]
+        shot["SHOT_TYPE"] = row["SHOT_TYPE"]
+        shot["SHOT_DISTANCE"] = row["SHOT_DISTANCE"]
+        shot["LOC_X"] = row["LOC_X"]
+        shot["LOC_Y"] = row["LOC_Y"]
+        shot["HTM"] = row["HTM"]
+        shot["VTM"] = row["VTM"] 
+        allshots.append(shot)
+
+    return jsonify(allshots)
 
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):
