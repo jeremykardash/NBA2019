@@ -364,7 +364,7 @@ function init() {
     table_gamelog(2544);
 
     // select dropdown menu item
-    var dropdown_team = d3.select("#teamID");
+    var dropdown_team = d3.select("#teamID").property("selected", function(d){ return d === "Lakers";});
     var dropdown_player = d3.select("#playerID");
 
     // read the data  through API

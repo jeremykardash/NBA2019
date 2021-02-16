@@ -52,8 +52,8 @@ body {
 }
 
 #header_scroll {
-    background-image: url("../../resources/basketball_banner_240px.png");
     background-color: #000000; /* Grey background */
+    background-image: url("../images/basketball_banner.png");
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */

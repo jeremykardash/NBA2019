@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NBA</title>
 
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <link rel="icon" type="image/png" href="../icon/basketball.png">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/basketball.png') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
@@ -17,7 +17,7 @@
     <div id='header_scroll'>
             NBA 2018-19
     </div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -62,31 +62,21 @@
                     <div id = "chord-chart">
                     </div>
                 </div>
-
-            </div>
-                
-                    
-        </div>
-        <div class ="row">
+                <div class ="card card-body bg-light my-4" id="bubble">
+                  <p>
           
-            <div class = "col-sm-12 col-xs-1">
-                <div class ="card card-body bg-light" id="bubble">
-                    <p>
-            
-                        <i>Select X-axis</i>
-                        <select id="x-stat" onchange="reportX(this.value)"></select>
-                        <!-- <br> -->
-                        <b>vs.</b>
-                        <!-- <br> -->
-                        <i>Select Y-axis</i>
-                        <select id="y-stat" onchange="reportY(this.value)"></select>
-                        <br>
-                        <b>Stats per game</b>
-                       
-                    </p>
-                </div>
-
-        
+                      <i>Select X-axis</i>
+                      <select id="x-stat" onchange="reportX(this.value)"></select>
+                      <!-- <br> -->
+                      <b>vs.</b>
+                      <!-- <br> -->
+                      <i>Select Y-axis</i>
+                      <select id="y-stat" onchange="reportY(this.value)"></select>
+                      <br>
+                      <b>Stats per game</b>
+                     
+                  </p>
+              </div>
             </div>
                 
                     
