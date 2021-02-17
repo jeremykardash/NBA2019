@@ -258,6 +258,7 @@ function shotchart(player_id) {
             .attr("cy", (d => height - yLinearScale(d.y)))
             .attr("r", "5")
             .attr("stroke", "grey")
+            .attr("fill", "orange")
             .attr("opacity", "1")
             .attr("fill", (d => d.class))
         
@@ -363,7 +364,7 @@ function init() {
     table_gamelog(2544);
 
     // select dropdown menu item
-    var dropdown_team = d3.select("#teamID");
+    var dropdown_team = d3.select("#teamID").property("selected", function(d){ return d === "Lakers";});
     var dropdown_player = d3.select("#playerID");
 
     // read the data  through API

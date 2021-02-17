@@ -7,18 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NBA</title>
 
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <link rel="icon" type="image/png" href="../icon/basketball.png">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/basketball.png') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v3.min.js"></script>
-
 </head>
 
 <body>
     <div id='header_scroll'>
             NBA 2018-19
     </div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark mb-4">
         <a class="navbar-brand" href="/">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -42,15 +41,25 @@
                       This season would mark the first time since 2010 in which LeBron James did not make a Finals appearance. 
                       This would also be the final season for Dirk Nowitzki, Tony Parker and Dwyane Wade.
                     </p>
-                <p>Add in snippets of the project proposal!<br>
+                    <p>
+                      <strong>Home Tab</strong>
+                      <br> 
+                      <strong>Chord chart</strong> illustrates trades and transactions made across the entire season between each team. 
+                      <br>
+                      <strong>Bubble chart</strong>  compares selected stat categories for all the players that played during the season. Each dot is a different player and can be hovered over for additional information. 
+                      <br>
+                      <b>Players Tab</b> has player info, season stats, shot chart and Game log for every player
+                    </p>
+                    <b>Resources</b><br>
                     <a href="https://getbootstrap.com/docs/4.0/layout/grid/">Bootstrap Grid system</a><br>
                     <a href="https://www.w3schools.com/bootstrap/bootstrap_panels.asp"> Bootstrap Panel system</a><br>
                     <a href="https://www.w3schools.com/jsref/event_onscroll.asp">JS Banner Scroll Function</a><br>
                     <a href= "http://bl.ocks.org/nbremer/94db779237655907b907"> D3 CHord Diagram with mouse over</a><br>
                     <a href=https://towardsdatascience.com/interactive-basketball-data-visualizations-with-plotly-8c6916aaa59e>
                     Plotly Shot Chart</a><br>
+                    <a href="https://bl.ocks.org/YouthBread/4481cdd85d60a503a986d658404232c8">Basketball Court D3</a>
         
-                    Let's put in some stuff!!!
+                    
                 </p>
                 
             </div>
@@ -59,11 +68,13 @@
 
         </div>          
             <div class = "col-sm-8">
+              <div class ="card">
+                <div class ="card-header bg-light"><h4>Chord Chart of Players Traded Between Teams</h4></div>
                 <div class ="card card-body bg-light" id="chord-holder">
-                  <h1>Chord Chart of Players Traded Between Teams</h1>
+
                   <p>The graphic below shows the flow of players between teams through the entirety of the 2018 - 2019 NBA season. Chords connect teams whose roster had duplicate players in the NBA roster dataset. The width of the chord is proportional to the number of players shared between the two groups.</p>
                   <p>
-                    Mouse over a team's name or "arc" in order to focus on only the chords attached to that team.
+                    Mouse over a team’s name or “arc” in order to focus on only the chords attached to that team.
                   </p>
                   <p>
                     For example, mousing over the 2019 NBA championship-winning Raptors, we can see the deal with the Memphis Grizzlies that saw three players (C.J. Miles, Jonas Valančiūnas, and Delon Wright) leave TOR in exchange for Marc Gasol. </p>
@@ -71,32 +82,29 @@
                     <div id = "chord-chart">
                     </div>
                 </div>
-
-            </div>
-                
-                    
-        </div>
-        <div class ="row">
-                       
-            <div class = "col-sm-12">
+              </div>
+              <br>
+                <div class ="card">
+                  <div class ="card-header bg-light"><h4>Bubble Chart</h4></div>
                 <div class ="card card-body bg-light" id="bubble">
-                    <p>
-            
-                        <i>Select X-axis</i>
-                        <select id="x-stat" onchange="reportX(this.value)"></select>
-                        <!-- <br> -->
-                        <b>vs.</b>
-                        <!-- <br> -->
-                        <i>Select Y-axis</i>
-                        <select id="y-stat" onchange="reportY(this.value)"></select>
-                        <br>
-                        <b>Stats per game</b>
-                       
-                    </p>
-                    <!-- <div id="bubble"></div> -->
-                </div>
-
-        
+                  <p>
+                      <i>Select X-axis</i>
+                      <select id="x-stat" onchange="reportX(this.value)">
+                        <option hidden >Points</option>
+                      </select>
+                      <!-- <br> -->
+                      <b>vs.</b>
+                      <!-- <br> -->
+                      <i>Select Y-axis</i>
+                      <select id="y-stat" onchange="reportY(this.value)">
+                        <option hidden >Assists</option>
+                      </select>
+                      <br>
+                      <b>Stats per game</b>
+                     
+                  </p>
+              </div>
+            </div>
             </div>
                 
                     
@@ -111,11 +119,11 @@
     <script src="../static/js/html_design.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../static/js/team_colours.js"></script>
-    <script src="../static/js/chord.js"></script>
     <!-- <script src="{{ url_for('static', filename='js/chord.js') }}"></script> -->
     <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chord.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
  
 </body>

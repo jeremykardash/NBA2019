@@ -15,16 +15,20 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
+
 ###NPA API
 from nbapy import game, shot_chart, player
+
 from nba_api.stats.static import players
 import nba_api.stats.endpoints
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import commonplayerinfo
 import pandas as pd
+from nba_api.stats.endpoints import shotchartdetail
+from nba_api.stats.library.parameters import ContextMeasureSimple, LastNGames, LeagueID, Month, Period, SeasonTypeAllStar, AheadBehindNullable, ClutchTimeNullable, EndPeriodNullable, EndRangeNullable, GameSegmentNullable, LocationNullable, OutcomeNullable, PlayerPositionNullable, PointDiffNullable, PositionNullable, RangeTypeNullable, SeasonNullable, SeasonSegmentNullable, StartPeriodNullable, StartRangeNullable, ConferenceNullable, DivisionNullable
+
 
 #pylint: disable=unused-variable
-
 
 # Flask Setup
 #################################################

@@ -16,42 +16,36 @@ d3.json(url).then(function(response){
 
 })
 
+
 //select dropdown items and set as initial axes 
 var xSelection ="Points";
 var ySelection ="Assists";
 
 //function to make xaxis interactive with dropdown menu 
 function reportX(stat) {
-  if (stat=="") return; // please select - possibly you want something else here
+  if (stat=="") return; 
 xSelection = stat;
 
 redraw();
 } 
 //function to make yaxis interactive with dropdown menu 
 function reportY(stat) {
-  if (stat=="") return; // please select - possibly you want something else here
+  if (stat=="") return; 
 ySelection = stat;
 
 redraw();
 } 
 
-var svgWidth = 855;
+var svgWidth = 990;
     
 var svgHeight = 600;
+
 
 var margin = {top: 20, right: 50, bottom: 70, left: 100};
         
 var width = svgWidth - margin.left - margin.right;
 
 var height = svgHeight - margin.top - margin.bottom;
-
-//console.log (margin);
-/* 
- * value accessor - returns the value to encode for a given data object.
- * scale - maps value to a visual display encoding, such as a pixel position.
- * map function - maps from data value to display value
- * axis - sets up axis
- */ 
 
 // function to redraw the graph after selecting new axes for chart 
 function redraw(){
@@ -80,7 +74,7 @@ var xaxis = chartGroup.append("g")
       .call(xAxis);
 // add x-label
     chartGroup.append("text")
-      .attr("x", width-380)
+      .attr("x", width-400)
       .attr("y", height+50)
       .attr("font-size","15")
       .attr("font-weight","bold")
@@ -95,7 +89,7 @@ var xaxis = chartGroup.append("g")
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", height-570)
-      .attr("x", width-975) //controls height 
+      .attr("x", width-1150) //controls height 
       .attr("font-size","15")
       .attr("font-weight","bold")
       .attr("dy", ".71em")
@@ -111,23 +105,23 @@ var xaxis = chartGroup.append("g")
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
     
-      //tooltip for circle group when mouseover
-    circlegroup.on("mouseover", function(d) {
-        console.log(xSelection)
-        console.log(d.target.__data__[xSelection])
-      tooltip.transition()
-           .duration(100)
-           .style("opacity", .9);
-           tooltip.html(`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
-           .style("left", d3.select(this).attr("cx") + "px")
-           .style("top", d3.select(this).attr("cy") + "px");     
-                })
-           .on("mouseout", function(d) {
-              tooltip.transition()
-                  .duration(500)
-                  .style("opacity", 0);
-              });
+      
+  var toolTip = d3.tip()
+      .attr("class", "tooltip-bubble")
+      .html(function(d) {
+        return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
+        });
 
+    // Create Tooltip in the Chart
+    circlegroup.call(toolTip);
+  // Create Event Listeners to Display and Hide the Text Tooltip
+    circlegroup.on("mouseover", function(data) {
+      toolTip.show(data, this);
+       })
+        .on("mouseout", function(data) {
+           toolTip.hide(data);
+                  });
+             
 //transition for circles when select new axes
   chartGroup.selectAll("circle")
                        .data(data)
@@ -135,12 +129,6 @@ var xaxis = chartGroup.append("g")
                        .duration(1000)
                        .attr("cx", xMap)
                         .attr("cy", yMap);
-
-
-    //   chartGroup.selectAll(".dot")
-    //   .data(data)
-    //          .exit()
-    //          .remove()
 
   // draw legend
   var legend = chartGroup.selectAll(".legend")
@@ -159,7 +147,7 @@ var xaxis = chartGroup.append("g")
 
   // draw legend text
   legend.append("text")
-      .attr("x", width - 2)
+      .attr("x", width - 11)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
@@ -210,12 +198,6 @@ var svg = d3.select("#bubble").append("svg")
 var chartGroup= svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// add the tooltip area to the webpage
-var tooltip = d3.select("#bubble").append("div")
-    .attr("class", "tooltip-bubble")
-    .style("opacity", 0);
-
-
 // for initial page, load data
 d3.json(url).then(function(data) {
 
@@ -239,7 +221,7 @@ d3.json(url).then(function(data) {
       .call(xAxis);
 //add x label
       chartGroup.append("text")
-      .attr("x", width-380)
+      .attr("x", width-400)
       .attr("y", height+50)
       .attr("font-size","15")
       .attr("font-weight","bold")
@@ -253,7 +235,7 @@ d3.json(url).then(function(data) {
       chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", height-570)
-      .attr("x", width-975)
+      .attr("x", width-1150)
       .attr("font-size","15")
       .attr("dy", ".71em")
       .attr("font-weight","bold")
@@ -271,22 +253,22 @@ d3.json(url).then(function(data) {
       .attr("cy", yMap)
       .style("fill", function(d) { return color(cValue(d));});
 
-    //tooltip on circle group 
-      circlegroup.on("mouseover", function(d) {
-          console.log(xSelection)
-          console.log(d.target.__data__[xSelection])
-        tooltip.transition()
-             .duration(100)
-             .style("opacity", .9);
-             tooltip.html (`${d.target.__data__.Player_name} <br> ${xSelection}: ${d.target.__data__[xSelection]} <br> ${ySelection}: ${d.target.__data__[ySelection]}`)
-             .style("left", d3.select(this).attr("cx") + "px")
-             .style("top", d3.select(this).attr("cy") + "px");
-                })
-             .on("mouseout", function(d) {
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-                });
+    //tooltip on circle group
+    var toolTip = d3.tip()
+        .attr("class", "tooltip-bubble")
+        .html(function(d) {
+             return (`${d.Player_name} <br> ${xSelection}: ${d[xSelection]} <br> ${ySelection}: ${d[ySelection]}`);
+        });
+        
+    // Create Tooltip in the Chart
+      circlegroup.call(toolTip);
+      // Create Event Listeners to Display and Hide the Text Tooltip
+      circlegroup.on("mouseover", function(data) {
+        toolTip.show(data, this);
+      })
+          .on("mouseout", function(data) {
+            toolTip.hide(data);
+            });
         
   // draw legend
   var legend = chartGroup.selectAll(".legend")
@@ -322,10 +304,8 @@ d3.json(url).then(function(data) {
 //remove unncessary dropdown menu items
 d3.selectAll("#Player_name").remove();
 d3.selectAll("#Player_id").remove();
-d3.selectAll("#Position").remove();
-   
+d3.selectAll("#Position").remove(); 
 });
-
 
 
 

@@ -18,7 +18,7 @@ body {
 .tooltip-shotchart {
     position: absolute;
     width: 135px;
-    height: 120px;
+    height: 80px;
     padding: 2px;
     padding-top: 8px;
     font: 12px sans-serif;
@@ -28,9 +28,9 @@ body {
     border-color: black;
     border: 0;
     border-radius: 10px;
-  };
+  }
 
-  .tooltip-bubble {
+.tooltip-bubble {
     padding: 4px;
     font-size: 12px;
     line-height: 1;
@@ -41,16 +41,6 @@ body {
     background: rgba(0, 0, 0, 0.8);
     border-radius: 12px;
   }
-  
-  
-h1 {
-    text-align: center;
-          }
-  
-h2 {
-    text-align: left;
-    }	
-
 
   #body{
       font-family: Georgia, 'Times New Roman', Times, serif;
@@ -62,8 +52,8 @@ h2 {
 }
 
 #header_scroll {
-    background-image: url("../../resources/basketball_banner_240px.png");
     background-color: #000000; /* Grey background */
+    background-image: url("../images/basketball_banner.png");
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
