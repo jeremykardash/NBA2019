@@ -237,35 +237,6 @@ def volume(player_id=None):
 
     return jsonify(volume)
 
-@app.route("/api/shotchart2/<id>")
-def shotcharts2(id=None):
-    data = shotchartdetail.ShotChartDetail(player_id=id, team_id=0, season_nullable='2018-19')
-    NewDF= data.get_data_frames()
-    df = NewDF[0]
-
-    allshots = []
-    for index, row in df.iterrows():
-        shot = {}
-        shot["year"] = row["GAME_DATE"][0:4]
-        shot["day"] = row["GAME_DATE"][4:6]
-        shot["month"] = row["GAME_DATE"][6:8]
-        shot["GAME_ID"] = row["GAME_ID"]
-        shot["TEAM_NAME"] = row["TEAM_NAME"]
-        shot["PLAYER_NAME"] = row["PLAYER_NAME"]
-        shot["quarter"] = row["PERIOD"]
-        shot["minutes"] = row["MINUTES_REMAINING"]
-        shot["seconds"] = row["SECONDS_REMAINING"]
-        shot["action_type"] = row["ACTION_TYPE"]
-        shot["shot_type"] = row["SHOT_TYPE"]
-        shot["shot_distance"] = row["SHOT_DISTANCE"]
-        shot["x"] = row["LOC_X"]
-        shot["y"] = row["LOC_Y"]
-        shot["home"] = row["HTM"]
-        shot["away"] = row["VTM"] 
-        allshots.append(shot)
-
-    return jsonify(allshots)
-
 @app.route("/api/shotchart/<player_id>")
 def shotcharts(player_id=None):
     

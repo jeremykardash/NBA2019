@@ -101,7 +101,7 @@ function shotchart(player_id) {
     remove_shotchart()
     
     //URL uses argument to create API
-    var url =`api/shotchart2/${player_id}`
+    var url =`api/shotchart/${player_id}`
 
     //Append SVG to the class
     var svg = d3.select(".shotchart")
@@ -260,7 +260,7 @@ function shotchart(player_id) {
             .attr("stroke", "grey")
             .attr("fill", "orange")
             .attr("opacity", "1")
-            //.attr("fill", (d => d.class))
+            .attr("fill", (d => d.class))
         
         //Add tooltip on circles
         var toolTip = d3.tip()
